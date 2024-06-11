@@ -29,7 +29,7 @@ require_once($CFG->libdir . '/formslib.php');
 use context_system;
 
 /**
- * upload_video_form
+ * settingsform
  */
 class settingsform extends \moodleform {
 
