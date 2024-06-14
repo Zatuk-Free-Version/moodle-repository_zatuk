@@ -1,0 +1,108 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template repository_zatuk/zatukview
+    Example context (json):
+    {
+        "register_form" :"",
+        "zatukkey" : "abc12341234",
+        "zatuksecret" : "234Absdj22"
+    }
+}}
+<div class="repository_view">
+
+    <div class="registration_process mb-3">
+        <div class="d-flex justify-content-center w-100">
+            <ul class="reg_path d-flex justify-content-center">
+                <li class="registration step-1 d-flex active flex-grow-1 align-items-center">
+                    <div class="d-flex flex-column align-items-center">
+                      <span class="process_no">1</span>
+                      <span class="stage_info">{{#str}}registeration, repository_zatuk{{/str}}</span>
+                    </div>
+                </li>
+                <li class="subscription step-2 d-flex flex-grow-1 align-items-center">
+                  <div class="d-flex flex-column align-items-center">
+                    <span class="process_no">2</span>
+                    <span class="stage_info">{{#str}}subscription, repository_zatuk{{/str}}</span>
+                  </div>
+                </li>
+                <li class="confirmation step-3 d-flex flex-grow-1 align-items-center">
+                  <div class="d-flex flex-column align-items-center">
+                    <span class="process_no">3</span>
+                    <span class="stage_info">{{#str}}confirmation, repository_zatuk{{/str}}</span>
+                  </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="registration_form mt-3 w-100 border rounded section_container">
+        <div class="regform_header p-3 d-flex justify-content-between">
+            <h6 class="mb-0">{{#str}}registeration, repository_zatuk{{/str}}</h6>
+
+        </div>
+        <div class="reg_form p-4">{{{register_form}}}</div>
+    </div>
+    <div class="registration_plans mt-3 section_container d-none">
+        <div class="d-flex justify-content-center">
+            <div class="plan_cards card">
+                <div class="plancard_content border rounded p-3">
+                    <div class="plan_amount">
+                        <div class="amount d-flex flex-column align-items-center">
+                            <h2>{{#str}}free, repository_zatuk{{/str}}</h2>
+                            <p>{{#str}}per_month, repository_zatuk{{/str}}</p>
+                        </div>
+                    </div>
+                   <a  data-action="zatukplans"><span class="btn start_btn w-100" >{{#str}}get_started, repository_zatuk{{/str}}</span></a>
+                    <div class="content_details mt-3">
+                        <ul class="plan_details">
+                            <li>{{#str}}zatuk_cloud_hosting, repository_zatuk{{/str}}</li>
+                            <li>{{#str}}video_space_10gb, repository_zatuk{{/str}}</li>
+                            <li>{{#str}}max_video_size_50mb, repository_zatuk{{/str}}</li>
+                            <li>{{#str}}band_monthly_5gb, repository_zatuk{{/str}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="registration_keys mt-4 m-auto section_container d-none">
+        <h5 class="key_header mb-2 text-center">
+            {{#str}}key_secret_instance, repository_zatuk{{/str}}
+        </h5>
+        <div class="secret_keys border">
+            <div class="border-bottom p-2 text-center"><b>{{#str}}configuration, repository_zatuk{{/str}}</b></div>
+            <div class="key_value text-muted active row p-2 m-0">
+                <div class="col-md-4 d-flex justify-content-end">{{#str}}apikey, repository_zatuk{{/str}} :</div>
+                <div class="col-md-8">
+                    <b class="text-dark">{{zatukkey}}</b>
+                </div>
+            </div>
+            <div class="key_value text-muted row p-2 m-0">
+                <div class="col-md-4 d-flex justify-content-end">{{#str}}secret, repository_zatuk{{/str}} :</div>
+                <div class="col-md-8">
+                    <b class="text-dark"> {{zatuksecret}}</b>
+                </div>
+            </div>
+        </div>
+        <div class="cnt_btn mt-3 text-center">
+             <a data-action="zatukdetails"><span class="bg-primary text-white btn btn-primary" >{{#str}}continue, repository_zatuk{{/str}}</span></a>
+        </div>
+    </div>
+</div>
+
+{{#js}}
+    require(['repository_zatuk/configuration'], function(s) {
+        s.init();
+    });
+{{/js}}

@@ -1,0 +1,151 @@
+#page-admin-repository-zatuk .zatukbanner{
+    background: #E9F3FF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 7px;
+    
+
+}
+
+#page-admin-repository-zatuk .zatuklogo{
+        background-image: url('[[pix:repository_zatuk|logo_z]]');
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 252px;
+        height: 93px;
+    }
+  #page-admin-repository-zatuk  .upgrade{
+        background-color: #FF4600 !important;;
+        border-color:#FF4600;
+       /* &:hover,&:focus{
+        background-color: #FF4600;
+        border-color:#FF4600;
+        }*/
+    }
+
+#page-admin-repository-zatuk #id_submitbutton {display: none;}
+#page-admin-repository-zatuk #id_cancel {display: none;}
+
+
+.registration_process .reg_path li .process_no {
+    position: relative;
+    border: 2px solid #EBEBEB;
+    border-radius: 50%;
+    background-color: #EBEBEB;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.registration_process .reg_path li:not(:last-child) .process_no:after{
+    content: "";
+    border: 3px solid #EBEBEB;
+    position: absolute;
+    width: 100%;
+    left: 38px;
+    min-width: 162px;
+}
+.registration_process .reg_path li .stage_info {
+    color: #8E8E8E;
+    font-weight: 600;
+    font-size: 12px;
+}
+.registration_process .reg_path li.active .process_no {
+    background-color: #F27F22;
+    color: #fff;
+    border-color: #F27F22 ;
+}
+.registration_process .reg_path li.active .stage_info{
+    color: #F27F22;
+}
+.registration_process .reg_path li.completed .stage_info{
+    color: #11A700;
+}
+.registration_process .reg_path li.completed:not(:last-child) .process_no:after{
+    border-color: #11A700;
+}
+.registration_process .reg_path li.completed .process_no{
+    background-color: #11A700;
+    color: #fff;
+    border-color: #11A700;
+}
+.repository_view .registration_form,
+.registration_plans .plan_cards,
+.registration_keys .secret_keys{
+    box-shadow: 0 0 2px 1px #ddd;
+}
+.registration_plans .plan_cards{
+    box-shadow: 0 0 2px 1px #ddd;
+    transition: all 0.5s;
+    width: fit-content;
+}
+.registration_plans .plan_cards .plancard_content{
+    color: #3B0000;
+}
+.registration_plans .plan_cards  .start_btn{
+    border: 1px solid #D45C2C;
+    border-radius: 0;
+    color: #D45C2C;
+    margin-bottom: 1rem;
+}
+.registration_plans .plan_cards .amount{
+    margin: 1rem 0 10px;
+}
+.registration_keys{
+    width: 100%;
+    max-width: 50%;
+}
+.registration_keys .key_header{
+    color: #0090E5;
+}
+.registration_keys .key_value.active {
+    background-color: #EEF8FE;
+}
+.registration_keys .cnt_btn button{
+    border-radius: 4px !important;
+    padding: 4px 15px;
+}
+.registration_process .reg_path li{
+    list-style: none;
+    position: relative;
+    min-width: 200px;
+}
+
+.registration_plans .plan_cards:hover{
+    transform: scale(1.1);
+    border: 1px solid #D45C2C;
+}
+
+.confirmationdialogue_content .icon{
+    background-image: url('[[pix:repository_zatuk|thank_you]]');
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 100px;
+    margin: 15px auto;
+}
+
+
+
+#page-admin-repository-zatuk .modal-dialog .modal-body {
+    padding: 0px;
+}
+#page-admin-repository-zatuk .modal-dialog .modal-header {
+    display: none;
+}
+#page-admin-repository-zatuk .modal-dialog .modal-footer{
+    border-top:none;
+    justify-content: center;
+}
+#page-admin-repository-zatuk .modal-dialog:focus {
+    box-shadow: none;
+}
+#page-admin-repository-zatuk .registration_form .regform_header {
+    border-bottom: 1px solid #d3d3d3;
+}
+#page-admin-repository-zatuk .registration_form .reg_form .form-group .felement .form-control {
+    width: 45%;
+    border: 1px solid #dfdfdf;
+    box-shadow: 0px 1px 2px #dfdfdf;
+}
