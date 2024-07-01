@@ -17,49 +17,67 @@
 /**
  * repository_zatuk provider class.
  *
- * @since Moodle 2.0
+ * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_zatuk\privacy;
+namespace repository_zatuk\privacy;
 
 use core_privacy\local\metadata\collection;
-use core_privacy\local\request\contextlist;
 use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
+use core_privacy\local\request\context;
+use core_privacy\local\request\contextlist;
+use core_privacy\local\request\userlist;
 
 /**
- * provider
+ * Privacy Subsystem for repository_zatuk implementing metadata, plugin providers.
+ *
+ * @copyright  2023 Moodle India
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements \core_privacy\local\metadata\provider, \core_privacy\local\request\plugin\provider {
+class provider implements
+        \core_privacy\local\metadata\provider,
+        \core_privacy\local\request\core_userlist_provider,
+        \core_privacy\local\request\plugin\provider {
+
     /**
-     * Get the language string identifier with the component's language
-     * file to explain why this plugin stores no data.
+     * Returns meta data about this system.
      *
-     * @return  string
-     */
-    public static function get_reason(): string {
-        return 'privacy:metadata';
-    }
-    /**
-     * Get information about the user data stored by this plugin.
-     *
-     * @param  collection $collection An object for storing metadata.
-     * @return collection The metadata.
+     * @param   collection $collection The initialised collection to add items to.
+     * @return  collection     A listing of user data stored through this system.
      */
     public static function get_metadata(collection $collection): collection {
-        $repositoryzatukaccess = [
-            'id' => 'privacy:metadata:id',
-            'costcenterid' => 'privacy:metadata:costcenterid',
-            'channelid' => 'privacy:metadata:channelid',
-            'timemodified' => 'privacy:metadata:timemodified',
-            'timecreated' => 'privacy:metadata:timecreated',
-            'usermodified' => 'privacy:metadata:usermodified',
-        ];
-        $collection->add_database_table('repository_zatuk_access',
-            $repositoryzatukaccess,
-            'privacy:metadata:repository_zatuk_access'
+        $collection->add_user_preference(
+            'organization',
+            'privacy:metadata:repository_zatuk:organization'
+        );
+
+        $collection->add_user_preference(
+            'organisationcode',
+            'privacy:metadata:repository_zatuk:organisationcode'
+        );
+
+        $collection->add_user_preference(
+            'name',
+            'privacy:metadata:repository_zatuk:name'
+        );
+
+        $collection->add_user_preference(
+            'email',
+            'privacy:metadata:repository_zatuk:email'
+        );
+
+        $collection->add_user_preference(
+            'zatuk_key',
+            'privacy:metadata:repository_zatuk:zatuk_key'
+        );
+
+         $collection->add_user_preference(
+            'zatuk_secret',
+            'privacy:metadata:repository_zatuk:zatuk_secret'
         );
 
         return $collection;
@@ -71,13 +89,15 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
      * @return  contextlist   $contextlist  The contextlist containing the list of contexts used in this plugin.
      */
     public static function get_contexts_for_userid(int $userid): contextlist {
-        $params = ['userid' => $userid, 'contextuser' => CONTEXT_USER];
-        $sql = "SELECT id
-                  FROM {context}
-                 WHERE instanceid = :userid and contextlevel = :contextuser";
-        $contextlist = new contextlist();
-        $contextlist->add_from_sql($sql, $params);
-        return $contextlist;
+        return new contextlist();
+    }
+
+    /**
+     * Get the list of users who have data within a context.
+     *
+     * @param   userlist    $userlist   The userlist containing the list of users who have data in this context/plugin combination.
+     */
+    public static function get_users_in_context(userlist $userlist) {
     }
 
     /**
@@ -86,7 +106,6 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
      * @param   approved_contextlist $contextlist The approved contexts to export information for.
      */
     public static function export_user_data(approved_contextlist $contextlist) {
-
     }
 
     /**
@@ -106,12 +125,10 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
     }
 
     /**
-     * Deletes non vital information about a user.
+     * Delete multiple users within a single context.
      *
-     * @param  int      $userid  The user ID to delete
-     * @param  \context $context The user context
+     * @param   approved_userlist       $userlist The approved context and user information to delete information for.
      */
-    protected static function delete_user_data(int $userid, \context $context) {
-        global $DB;
+    public static function delete_data_for_users(approved_userlist $userlist) {
     }
 }

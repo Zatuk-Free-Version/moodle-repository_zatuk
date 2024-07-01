@@ -17,7 +17,7 @@
 /**
  * zatuk repository renderer.
  *
- * @since Moodle 2.0
+ * @since       Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -44,6 +44,6 @@ class repository_zatuk_renderer extends plugin_renderer_base {
      * @param zatuksettings $output
      */
     public function render_zatuksettings(zatuksettings $output) {
-        return $this->render_from_template('repository_zatuk/zatukview', $output->export_for_template($this));
+        return $this->render_from_template('repository_zatuk/zatuk_view', $output->export_for_template($this));
     }
 }

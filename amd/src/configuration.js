@@ -81,7 +81,7 @@ export const init = () => {
             promise[0].done(function(resp) {
                 if(resp.success) {
                     var confirmA = '<div class="d-flex justify-content-center align-items-center';
-                    var confirmB = ' flex-column w-100 p-3 confirmationdialogue_content">';
+                    var confirmB = ' flex-column w-100 p-3 zatukconfirmationdialogue_content">';
                     var confirmC = '<div class="icon"></div><h4 class="my-3">Thank you for choosing free trail!</h4></div>';
                     confirmbox(confirmA + confirmB + confirmC);
                     $(".secret_keys").load(location.href + " .secret_keys");
@@ -136,7 +136,7 @@ export const init = () => {
             promise[0].done(function(resp) {
                 if(resp) {
                     var confirmA = '<div class="d-flex justify-content-center align-items-center';
-                    var confirmB = ' flex-column w-100 p-3 confirmationdialogue_content">';
+                    var confirmB = ' flex-column w-100 p-3 zatukconfirmationdialogue_content">';
                     var confirmC = '<div class="icon"></div><h4 class="my-3">Updated successfully</h4></div>';
                     confirmbox(confirmA + confirmB + confirmC);
                 }

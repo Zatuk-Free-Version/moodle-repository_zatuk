@@ -15,15 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * zatuk repository version information
+ * This file is used to get encryption key.
  *
- * @since Moodle 2.0
+ * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2023042000.12; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2013110500; // Requires this Moodle version.
-$plugin->component = 'repository_zatuk'; // Full name of the plugin (used for diagnostics).
+$plugin->version = 2022041900.07;
+$plugin->requires = 2022041900.00; // Moodle 4.0.
+$plugin->supported = [400, 440];
+$plugin->component = 'repository_zatuk';
+$plugin->maturity = MATURITY_STABLE;
+$plugin->release = '4.x (Build: 2022041900.00)';
+$plugin->dependencies = [
+    'mod_zatuk' => 2022041900.00,
+];
+

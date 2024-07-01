@@ -17,7 +17,7 @@
 /**
  * repository_zatuk video_service class.
  *
- * @since Moodle 2.0
+ * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 use stdClass;
 use context_system;
 use repository_zatuk\app_service;
-require_login();
 require_once("$CFG->libdir/externallib.php");
 /**
  * video_service
@@ -89,17 +88,20 @@ class video_service {
     public function index($params) {
         $sql = "SELECT rsv.id, rsv.*, u.username FROM {repository_zatuk_videos} rsv
                   JOIN {user} u ON u.id = rsv.usercreated WHERE 1 = 1";
-
+        $queryparams = [];
         if (!empty($params->search)) {
-            $sql .= " AND rsv.title LIKE '%{$params->search}%'";
+            $sql .= " AND ".$this->db->sql_like('rsv.title', ':titlesearch', false)." ";
+            $queryparams['titlesearch']  = '%'.$params->search.'%';
         }
 
         if (!empty($params->status)) {
-            $sql .= " AND rsv.status = {$params->status}";
+            $sql .= " AND rsv.status =:vstatus";
+            $queryparams['vstatus']  = $params->status;
         }
 
         if (!empty($params->user)) {
-            $sql .= " AND rsv.usercreated = {$params->user}";
+            $sql .= " AND rsv.usercreated = :vuser";
+            $queryparams['vuser']  = $params->user;
         }
 
         if (!empty($params->sort)) {
@@ -111,7 +113,7 @@ class video_service {
         } else {
             $sql .= " ORDER BY rsv.id DESC";
         }
-        $results = $this->db->get_records_sql($sql);
+        $results = $this->db->get_records_sql($sql, $queryparams);
         return $this->format_videos_response($results);
     }
 
@@ -327,8 +329,8 @@ class video_service {
 
         $apiresponse = $service->upgrade_package($name, $email, $token, $organization, $organisationcode);
         $response = $apiresponse['response'];
-        if (!@$response->success) {
-            if (@$response->errors && is_object(@$response->errors)) {
+        if (!$response->success) {
+            if ($response->errors && is_object($response->errors)) {
                 foreach ($response->errors as $key => $apierror) {
                     if ($key == 'token') {
                         $errors['moodle_token'] = $apierror[0];
@@ -337,7 +339,7 @@ class video_service {
                     }
                 }
             }
-            @$errors['generic_errors'] = $response->message;
+            $errors['generic_errors'] = $response->message;
         } else {
 
             if ($organization) {

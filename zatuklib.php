@@ -19,7 +19,7 @@
  *
  * This class provides all the functionality for the new zatuk repository.
  *
- * @since Moodle 2.0
+ * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -33,42 +33,42 @@ define('HEX2BIN_WS', " \t\n\r");
 class phpzatuk {
 
     /**
-     * @var array $clientid
+     * @var string $clientid
      */
     public $clientid;
     /**
-     * @var array $secret
+     * @var string $secret
      */
     public $secret;
     /**
-     * @var array $email
+     * @var string $email
      */
     public $email;
     /**
-     * @var array $name
+     * @var string $name
      */
     public $name;
     /**
-     * @var array $xauthtoken
+     * @var string $xauthtoken
      */
     public $xauthtoken;
     /**
-     * @var array $apiurl
+     * @var string $apiurl
      */
     public $apiurl;
 
     /**
      * [__construct description]
-     * @param array $apiurl
-     * @param array $clientid
-     * @param array $secret
+     * @param string $apiurl
+     * @param string $clientid
+     * @param string $secret
      */
     public function __construct($apiurl, $clientid, $secret) {
         global $CFG;
         require_once($CFG->libdir.'/filelib.php');
         // The API Key must be set before any calls can be made.
         $this->apiurl = $apiurl;
-        $this->client_id = $clientid;
+        $this->clientid = $clientid;
         $this->secret = $secret;
         $this->xauth_token = '';
     }
@@ -85,10 +85,15 @@ class phpzatuk {
         global $CFG;
         $tokenurl = $this->apiurl."/api/v1/apis/token";
         $c = new \curl();
-        $tokenjson = $c->post($tokenurl, ['key' => $this->client_id, 'secret' => $this->secret, 'domain' => $CFG->wwwroot]);
+        $tokenjson = $c->post($tokenurl, ['key' => $this->clientid, 'secret' => $this->secret, 'domain' => $CFG->wwwroot]);
         $tokeninfo = json_decode($tokenjson);
-        $token = $tokeninfo->token;
-        $params = ['token' => $token];
+        if ($tokeninfo ) {
+            $token = $tokeninfo->token;
+            $params = ['token' => $token];
+        } else {
+
+            $params = ['token' => ''];
+        }
 
         return $params;
     }
@@ -101,7 +106,7 @@ class phpzatuk {
         $encryptionurl = $this->apiurl."/api/v1/videos/encryption";
         $c = new \curl();
         $params = $this->get_listing_params();
-        $params['key'] = $this->client_id;
+        $params['key'] = $this->clientid;
         $params['secret'] = $this->secret;
         $params['uri'] = $url;
         $content = $c->get($encryptionurl, $params);
@@ -120,7 +125,7 @@ class phpzatuk {
         $searchurl = $this->apiurl."/api/v1/videos/uploaddata";
         $c = new \curl();
         $params = $this->get_listing_params();
-        $params['key'] = $this->client_id;
+        $params['key'] = $this->clientid;
         $params['secret'] = $this->secret;
         $content = $c->post($searchurl, $params);
         return $content;

@@ -17,7 +17,7 @@
 /**
  * repository_zatuk settingsform form
  *
- * @since Moodle 2.0
+ * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,7 +25,7 @@
 namespace repository_zatuk\form;
 
 defined('MOODLE_INTERNAL') || die;
-require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->dirroot.'/lib/formslib.php');
 use context_system;
 
 /**
@@ -99,12 +99,12 @@ class settingsform extends \moodleform {
             $mform->addHelpButton('organization_code', 'organization_code_content', 'repository_zatuk');
             $mform->addRule('organization_code', get_string('required', 'repository_zatuk'), 'required', null, 'client');
 
-            $cattribute = '<a  data-action="zatuksettings" ><span class="bg-primary text-white btn btn-primary" >';
             $mform->addElement('text', 'zatuk_api_url', get_string('zatuk_api_url', 'repository_zatuk'), ['value' => $zatukapiurl]);
             $mform->setType('zatuk_api_url', PARAM_RAW_TRIMMED);
             $mform->addHelpButton('zatuk_api_url', 'zatuk_api_url_content', 'repository_zatuk');
             $mform->addRule('zatuk_api_url', get_string('required', 'repository_zatuk'), 'required', null, 'client');
-            $mform->addElement('html', $cattribute .get_string('zatuksettings', 'repository_zatuk').'</span></a>');
+            $mform->addElement('submit', 'submit', get_string('zatuksettings', 'repository_zatuk'),
+             ['data-action' => 'zatuksettings']);
         } else {
             $orgcodevalues = ['value' => $organizationcode, "disabled" => "disabled"];
             $mform->addElement('text', 'organization_code', $orgcodestring , $orgcodevalues);
@@ -113,18 +113,19 @@ class settingsform extends \moodleform {
             $mform->addRule('organization_code', get_string('required', 'repository_zatuk'), 'required', null, 'client');
 
             $apiurlstring = get_string('zatuk_api_url', 'repository_zatuk');
-            $uattribute = '<a  data-action="updatesettings" ><span class="bg-primary text-white btn btn-primary" >';
 
             $mform->addElement('text', 'zatuk_api_url', $apiurlstring , ['value' => $zatukapiurl , "disabled" => "disabled"]);
             $mform->setType('zatuk_api_url', PARAM_RAW_TRIMMED);
             $mform->addHelpButton('zatuk_api_url', 'zatuk_api_url_content', 'repository_zatuk');
             $mform->addRule('zatuk_api_url', get_string('required', 'repository_zatuk'), 'required', null, 'client');
-            $mform->addElement('html', $uattribute.get_string('zatuksettingsupdate', 'repository_zatuk').'</span></a>');
+            $mform->addElement('submit', 'submit', get_string('zatuksettingsupdate', 'repository_zatuk'),
+             ['data-action' => 'updatesettings']);
         }
+        $this->add_action_buttons();
 
     }
     /**
-     * [validation description]
+     * Describes the form field validation.
      * @param array $data
      * @param array $files
      */

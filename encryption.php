@@ -17,7 +17,7 @@
 /**
  * This file is used to get encryption key.
  *
- * @since Moodle 2.0
+ * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,6 +26,7 @@
 require_once('../../config.php');
 global $CFG;
 require_login();
+require_capability('repository/zatuk:view', context_system::instance());
 use repository_zatuk\video_service;
 $url = required_param('uri', PARAM_RAW);
 $videoservice = new video_service();

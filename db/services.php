@@ -17,13 +17,13 @@
 /**
  * repository_zatuk external functions and service definitions.
  *
- * @since Moodle 2.0
+ * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die;
-define('MOODLE_ZATUK_WEB_SERVICE', 'zatuk_web_service');
+require_once($CFG->dirroot.'/repository/zatuk/lib.php');
 $functions = [
 
     'repository_zatuk_validate_instance' => [
@@ -92,3 +92,17 @@ $functions = [
         'loginrequired' => true,
     ],
 ];
+
+
+$services = [
+   'Zatuk Webservices'  => [
+        'functions' => [], // Unused as we add the service in each function definition, third party services would use this.
+        'enabled' => 1,
+        'restrictedusers' => 0,
+        'shortname' => 'zatuk_web_service',
+        'downloadfiles' => 1,
+        'uploadfiles' => 1,
+    ],
+];
+
+

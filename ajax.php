@@ -17,7 +17,7 @@
 /**
  * This file uset to fetch information from repository_zatuk config and display the data.
  *
- * @since Moodle 2.0
+ * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,8 +27,9 @@ use repository_zatuk\app_service;
 require_once('../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir.'/externallib.php');
-require_login();
 global $CFG, $DB, $USER, $PAGE, $OUTPUT, $SESSION;
+require_login();
+require_capability('repository/zatuk:view', context_system::instance());
 $organization = required_param('organization', PARAM_RAW);
 $zatukapiurl = required_param('zatuk_api_url', PARAM_RAW);
 $organisationcode = required_param('organization', PARAM_RAW);
@@ -55,8 +56,8 @@ $service = new app_service();
 set_config('zatuk_api_url', $zatukapiurl, 'repository_zatuk');
 $response = $service->upgrade_package($name, $email, $token, $organization, $organisationcode);
 $response = $response['response'];
-if (!@$response->success) {
-    if (@$response->errors && is_object(@$response->errors)) {
+if (!$response->success) {
+    if ($response->errors && is_object($response->errors)) {
         foreach ($response->errors as $key => $apierror) {
             if ($key == 'token') {
                 $errors['moodle_token'] = $apierror[0];
@@ -65,7 +66,7 @@ if (!@$response->success) {
             }
         }
     }
-    @$errors['generic_errors'] = $response->message;
+    $errors['generic_errors'] = $response->message;
 } else {
 
     if ($organization) {
@@ -89,4 +90,4 @@ if (!@$response->success) {
         set_config('zatuk_secret', $response->api_info->secret, 'repository_zatuk');
     }
 }
-echo @$response->success;
+echo $response->success;
