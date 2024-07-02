@@ -169,7 +169,51 @@ class repository_zatuk extends repository {
      * @param array $page
      */
     public function search($q, $page = 0) {
-        return $this->service->get_videos();
+        global $OUTPUT;
+        $folderurl = $OUTPUT->pix_url('f/folder-128')->out();
+        $this->listingurl = $this->zatuk->createlistingapiurl();
+        $params = $this->zatuk->get_listing_params();
+        $params['currentPath'] = '/';
+        $params['search'] = $q ? $q : '';
+        $request = new curl();
+        $content = $request->post($this->listingurl, $params);
+        $content = json_decode($content, true);
+        $folderlists = array_merge($content['forganizations'], $content['fdirectories']);
+        $fileslist = $content['fvideos'];
+        $return = ['dynload' => true, 'nosearch' => false, 'nologin' => true];
+        foreach ($content['navPath'] as $paths) {
+            $pathelement = [
+                'icon' => $OUTPUT->image_url(file_folder_icon(90))->out(false),
+                'path' => $paths['navpathdata'],
+                'name' => $paths['name'],
+            ];
+            $return['path'][] = $pathelement;
+
+        }
+        $return['list'] = [];
+        foreach ($folderlists as $folders) {
+            $listelement = [];
+            $listelement['thumbnail'] = $folderurl;
+            $listelement['thumbnail_width'] = 90;
+            $listelement['thumbnail_height'] = 90;
+            $listelement['title'] = $folders['fullname'];
+            $listelement['path'] = $folders['path'];
+            $listelement['children'] = [];
+            $return['list'][] = $listelement;
+        }
+        foreach ($fileslist as $files) {
+            $filecontent = [
+                'thumbnail' => $this->api_url.'/storage/'.$files['thumbnail'],
+                'title' => $files['title'].'.avi',
+                'source' => $files['encodedurl'],
+                'date' => strtotime($files['timecreated']),
+                'license' => 'unknown',
+                'thumbnail_title' => $files['title'],
+                'encoded_url' => $files['encodedurl'],
+            ];
+            $return['list'][] = $filecontent;
+        }
+        return $return;
     }
     /**
      * return list
