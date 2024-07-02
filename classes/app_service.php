@@ -34,7 +34,7 @@ use curl;
 class app_service {
 
     /**
-     * @var url $apiurl
+     * @var string $apiurl
      */
     protected $apiurl;
 
@@ -120,7 +120,7 @@ class app_service {
 
     /**
      * Gets token expiry time
-     * @return timestamp $tokenexpiresat
+     * @return int $tokenexpiresat
      */
     protected function get_expires_at() {
         return $this->session->zatuk_access_token_expires_at ? $this->session->zatuk_access_token_expires_at : false;
@@ -160,14 +160,14 @@ class app_service {
                 default:
             }
             if (isset($data['response']) && $data['response'] == 'raw') {
-                $apiresponse = $apiresponse;
+                $finalapiresponse = $apiresponse;
             } else {
-                $apiresponse = json_decode($apiresponse);
+                $finalapiresponse = json_decode($apiresponse);
             }
             $response = [
                 'error'     => false,
                 'message'   => '',
-                'response'  => $apiresponse,
+                'response'  => $finalapiresponse,
             ];
         } catch (\Exception $e) {
             $response = [
@@ -299,7 +299,7 @@ class app_service {
         $urlparams = [
             "videoid"   => $videoid,
         ];
-        $response = $this->make_api_call('get_video', '', $urlparams);
+        $response = $this->make_api_call('get_video', [], $urlparams);
         return $response;
     }
 
@@ -324,7 +324,7 @@ class app_service {
     public function upload_video($payload) {
         $headers = [];
         $headers[] = 'Content-Type:multipart/form-data';
-        $response = $this->make_api_call('upload_video', $payload, '', $headers);
+        $response = $this->make_api_call('upload_video', $payload, [], $headers);
         return $response;
     }
 }

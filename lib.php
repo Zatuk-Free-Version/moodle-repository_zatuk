@@ -33,44 +33,50 @@ use repository_zatuk\app_service;
  */
 class repository_zatuk extends repository {
 
+    /** Number of videos to load per page */
+    const ZATUK_THUMBS_PER_PAGE = 10;
     /**
      * @var array $service
      */
     protected $service;
     /**
-     * @var array $zatukkey
+     * @var string $zatukapiurl
+     */
+    protected $zatukapiurl;
+    /**
+     * @var string $zatukkey
      */
     protected $zatukkey;
     /**
-     * @var array $zatuksecret
+     * @var string $zatuksecret
      */
     protected $zatuksecret;
     /**
-     * @var array $settings
+     * @var array $zatuk
      */
-
+    protected $zatuk;
     /**
      * [__construct description]
-     * @param array $repositoryid
-     * @param array $context
+     * @param int $repositoryid
+     * @param int|stdClass $context
      * @param array $options
      */
     public function __construct($repositoryid, $context = SYSCONTEXTID, $options = []) {
         parent::__construct($repositoryid, $context, $options);
-        $this->api_key = get_config('repository_zatuk', 'zatuk_key');
-        $this->api_url = get_config('repository_zatuk', 'zatuk_api_url');
-        $this->secret = get_config('repository_zatuk', 'zatuk_secret');
+        $this->zatukkey = get_config('repository_zatuk', 'zatuk_key');
+        $this->zatukapiurl = get_config('repository_zatuk', 'zatuk_api_url');
+        $this->zatuksecret = get_config('repository_zatuk', 'zatuk_secret');
         $this->service = new app_service($this->zatukkey, $this->zatuksecret);
         $this->email_address  = $this->get_option('email');
         $this->user_name  = $this->get_option('name');
-        $this->zatuk = new phpzatuk($this->api_url, $this->api_key, $this->secret, $this->email_address, $this->user_name);
+        $this->zatuk = new phpzatuk($this->zatukapiurl, $this->zatukkey, $this->zatuksecret);
 
     }
 
     /**
-     * [type_config_form description]
-     * @param array $mform
-     * @param array $classname
+     * Add plugin settings input to Moodle form.
+     * @param object $mform
+     * @param string $classname
      */
     public static function type_config_form($mform, $classname = 'repository') {
         global $OUTPUT, $CFG, $PAGE;
@@ -88,9 +94,8 @@ class repository_zatuk extends repository {
             $render = new repository_zatuk\output\zatukconfiguration($systemcontext);
             $mform->addElement('html', html_writer::tag('div', $renderer->render($render)));
         }
-
     }
-
+    
     /**
      * [type_form_validation description]
      * @param array $mform
@@ -135,12 +140,35 @@ class repository_zatuk extends repository {
      * @param array $q
      * @param array $page
      */
-
-     /**
-      * [get_collection description]
-      * @param array $content [description]
-      * Private method to get video list
-      */
+    public function search($q, $page = 0) {
+        $ret  = [];
+        $ret['nologin'] = true;
+        $ret['page'] = (int)$page;
+        if ($ret['page'] < 1) {
+            $ret['page'] = 1;
+        }
+        $start = ($ret['page'] - 1) * self::ZATUK_THUMBS_PER_PAGE + 1;
+        $start = $start - 1;
+        $searchurl = $this->zatuk->createSearchApiUrl();
+        $params = $this->zatuk->get_listing_params();
+        $params['q'] = $q;
+        $params['perpage'] = self::ZATUK_THUMBS_PER_PAGE;
+        $request = new curl();
+        $content = $request->post($searchurl, $params);
+        $content = json_decode($content, true);
+        $ret['list'] = $this->get_collection($content);
+        $ret['norefresh'] = true;
+        $ret['nosearch'] = false;
+        $ret['total'] = $content['meta']['total'];
+        $ret['pages'] = ceil($content['meta']['total'] / self::ZATUK_THUMBS_PER_PAGE);
+        $ret['perpage'] = self::ZATUK_THUMBS_PER_PAGE;
+        return $ret;
+    }
+    /**
+     * [get_collection description]
+     * @param array $content [description]
+     * Private method to get video list
+     */
     private function get_collection($content) {
         $list = [];
         if (count($content['data']) > 0) {
@@ -149,7 +177,7 @@ class repository_zatuk extends repository {
                     'shorttitle' => $entry['title'],
                     'thumbnail_title' => $entry['title'],
                     'title' => $entry['title'].'.avi', // This is a hack so we accept this file by extension.
-                    'thumbnail' => $this->api_url.stripslashes($entry['thumbnail']),
+                    'thumbnail' => $this->zatukapiurl.stripslashes($entry['thumbnail']),
                     'videoid' => stripslashes($entry['videoid']),
                     'thumbnail_width' => 150,
                     'thumbnail_height' => 150,
@@ -164,72 +192,20 @@ class repository_zatuk extends repository {
         return $list;
     }
     /**
-     * [search description]
-     * @param array $q
-     * @param array $page
-     */
-    public function search($q, $page = 0) {
-        global $OUTPUT;
-        $folderurl = $OUTPUT->pix_url('f/folder-128')->out();
-        $this->listingurl = $this->zatuk->createlistingapiurl();
-        $params = $this->zatuk->get_listing_params();
-        $params['currentPath'] = '/';
-        $params['search'] = $q ? $q : '';
-        $request = new curl();
-        $content = $request->post($this->listingurl, $params);
-        $content = json_decode($content, true);
-        $folderlists = array_merge($content['forganizations'], $content['fdirectories']);
-        $fileslist = $content['fvideos'];
-        $return = ['dynload' => true, 'nosearch' => false, 'nologin' => true];
-        foreach ($content['navPath'] as $paths) {
-            $pathelement = [
-                'icon' => $OUTPUT->image_url(file_folder_icon(90))->out(false),
-                'path' => $paths['navpathdata'],
-                'name' => $paths['name'],
-            ];
-            $return['path'][] = $pathelement;
-
-        }
-        $return['list'] = [];
-        foreach ($folderlists as $folders) {
-            $listelement = [];
-            $listelement['thumbnail'] = $folderurl;
-            $listelement['thumbnail_width'] = 90;
-            $listelement['thumbnail_height'] = 90;
-            $listelement['title'] = $folders['fullname'];
-            $listelement['path'] = $folders['path'];
-            $listelement['children'] = [];
-            $return['list'][] = $listelement;
-        }
-        foreach ($fileslist as $files) {
-            $filecontent = [
-                'thumbnail' => $this->api_url.'/storage/'.$files['thumbnail'],
-                'title' => $files['title'].'.avi',
-                'source' => $files['encodedurl'],
-                'date' => strtotime($files['timecreated']),
-                'license' => 'unknown',
-                'thumbnail_title' => $files['title'],
-                'encoded_url' => $files['encodedurl'],
-            ];
-            $return['list'][] = $filecontent;
-        }
-        return $return;
-    }
-    /**
      * return list
      * @param array $path
      * @param array $page
      */
     public function get_listing($path='', $page = '') {
         global $OUTPUT;
-        $folderurl = $OUTPUT->pix_url('f/folder-128')->out();
-        $this->listingurl = $this->zatuk->createlistingapiurl();
+        $folderurl = $OUTPUT->image_url('f/folder-128')->out();
+        $listingurl = $this->zatuk->createlistingapiurl();
 
         $params = $this->zatuk->get_listing_params();
         $params['currentPath'] = $path ? $path : '/';
         $params['search'] = null;
         $request = new curl();
-        $content = $request->post($this->listingurl, $params);
+        $content = $request->post($listingurl, $params);
 
         $content = json_decode($content, true);
         $folderlists = array_merge($content['forganizations'], $content['fdirectories']);
@@ -257,7 +233,7 @@ class repository_zatuk extends repository {
         }
         foreach ($fileslist as $files) {
             $filecontent = [
-                'thumbnail' => $this->api_url.'/storage/'.$files['thumbnail'],
+                'thumbnail' => $this->zatukapiurl.'/storage/'.$files['thumbnail'],
                 'title' => $files['title'].'.avi',
                 'source' => $files['encodedurl'],
                 'date' => strtotime($files['timecreated']),

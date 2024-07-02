@@ -28,7 +28,7 @@ use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
-use repository_zatuk\form\settingsform;
+use repository_zatuk\form\configurationform;
 /**
  * videos
  */
@@ -43,7 +43,7 @@ class zatukconfiguration implements renderable, templatable {
     protected $service;
     /**
      * [__construct description]
-     * @param array $context
+     * @param \context $context
      */
     public function __construct($context) {
 
@@ -55,7 +55,7 @@ class zatukconfiguration implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         global $CFG, $USER;
         $data = new stdClass;
-        $filterform = new settingsform(null, '');
+        $filterform = new configurationform(null, '');
         $data->register_form = $filterform->render();
         $data->zatukkey = get_config('repository_zatuk', 'zatuk_key');
         $data->zatuksecret = get_config('repository_zatuk', 'zatuk_secret');

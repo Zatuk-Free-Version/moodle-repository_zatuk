@@ -53,7 +53,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the validate_instance return value.
-     * @return  array external_single_structure
+     * @return  external_single_structure
      */
     public static function validate_instance_returns() {
         return new external_single_structure(
@@ -64,7 +64,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the parameters for get_videos .
-     * @return  array external_function_parameters
+     * @return  external_function_parameters
      */
     public static function get_videos_parameters() {
         return new external_function_parameters(
@@ -99,7 +99,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the get_videos return value.
-     * @return  array external_multiple_structure
+     * @return  external_multiple_structure
      */
     public static function get_videos_returns() {
         return new external_multiple_structure(
@@ -125,7 +125,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the parameters for get_video_url .
-     * @return  array external_function_parameters
+     * @return  external_function_parameters
      */
     public static function get_video_url_parameters() {
         return new external_function_parameters(
@@ -136,7 +136,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Returns a response of video object by given videoid.
-     * @param array $videoid
+     * @param string $videoid
      * @return  array
      */
     public static function get_video_url($videoid) {
@@ -151,7 +151,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the get_video_url return value.
-     * @return  array external_single_structure
+     * @return external_single_structure
      */
     public static function get_video_url_returns() {
         return new external_single_structure(
@@ -175,7 +175,7 @@ class repository_zatuk_external extends external_api {
 
     /**
      * Describes the parameters for enable_zatuk .
-     * @return  array external_function_parameters
+     * @return external_function_parameters
      */
     public static function enable_zatuk_parameters() {
         return new external_function_parameters(
@@ -204,7 +204,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      *  Describes the enable_zatuk return value.
-     * @return  array external_single_structure
+     * @return external_single_structure
      */
     public static function enable_zatuk_returns() {
         return new external_single_structure(
@@ -215,7 +215,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the parameters for zatukplans .
-     * @return  array external_function_parameters
+     * @return external_function_parameters
      */
     public static function zatukplans_parameters() {
         return new external_function_parameters(
@@ -274,7 +274,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the zatukplan return value.
-     * @return  array external_single_structure
+     * @return  external_single_structure
      */
     public static function zatukplans_returns() {
          return new external_single_structure(
@@ -289,7 +289,7 @@ class repository_zatuk_external extends external_api {
 
     /**
      * Describes the parameters for updatezatuksettings .
-     * @return  array external_function_parameters
+     * @return external_function_parameters
      */
     public static function updatezatuksettings_parameters() {
         return new external_function_parameters(
@@ -328,7 +328,6 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the updatezatuksettings return value.
-     * @return  array external_single_structure
      */
     public static function updatezatuksettings_returns() {
         return new external_value(PARAM_BOOL, 'return');

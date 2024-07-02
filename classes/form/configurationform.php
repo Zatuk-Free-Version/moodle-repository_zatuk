@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * repository_zatuk settingsform form
+ * repository_zatuk configurationform form
  *
  * @since      Moodle 2.0
  * @package    repository_zatuk
@@ -29,9 +29,9 @@ require_once($CFG->dirroot.'/lib/formslib.php');
 use context_system;
 
 /**
- * settingsform
+ * configurationform
  */
-class settingsform extends \moodleform {
+class configurationform extends \moodleform {
 
     /**
      * [definition description]
@@ -104,7 +104,7 @@ class settingsform extends \moodleform {
             $mform->addHelpButton('zatuk_api_url', 'zatuk_api_url_content', 'repository_zatuk');
             $mform->addRule('zatuk_api_url', get_string('required', 'repository_zatuk'), 'required', null, 'client');
             $mform->addElement('submit', 'submit', get_string('zatuksettings', 'repository_zatuk'),
-             ['data-action' => 'zatuksettings']);
+            ['data-action' => 'zatuksettings']);
         } else {
             $orgcodevalues = ['value' => $organizationcode, "disabled" => "disabled"];
             $mform->addElement('text', 'organization_code', $orgcodestring , $orgcodevalues);
@@ -119,10 +119,8 @@ class settingsform extends \moodleform {
             $mform->addHelpButton('zatuk_api_url', 'zatuk_api_url_content', 'repository_zatuk');
             $mform->addRule('zatuk_api_url', get_string('required', 'repository_zatuk'), 'required', null, 'client');
             $mform->addElement('submit', 'submit', get_string('zatuksettingsupdate', 'repository_zatuk'),
-             ['data-action' => 'updatesettings']);
+            ['data-action' => 'updatesettings']);
         }
-        $this->add_action_buttons();
-
     }
     /**
      * Describes the form field validation.
