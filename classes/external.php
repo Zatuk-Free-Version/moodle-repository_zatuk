@@ -25,6 +25,8 @@
 defined('MOODLE_INTERNAL') || die;
 require_once("$CFG->libdir/externallib.php");
 use repository_zatuk\video_service;
+
+
 /**
  * repository_zatuk_external
  */
@@ -44,8 +46,15 @@ class repository_zatuk_external extends external_api {
     /**
      * this check the existance of moodle instance.
      * @param array $value
+     * @return array
      */
     public static function validate_instance($value = '') {
+        $params = self::validate_parameters(
+            self::validate_instance_parameters(),
+            [
+                'value' => $value,
+            ]
+        );
         self::validate_context(context_system::instance());
         return [
             'success'   => true,
@@ -88,6 +97,14 @@ class repository_zatuk_external extends external_api {
      * @return  array
      */
     public static function get_videos($sorting, $search, $status) {
+        $params = self::validate_parameters(
+            self::get_videos_parameters(),
+            [
+                'sorting' => $sorting,
+                'search' => $search,
+                'status' => $status,
+            ]
+        );
         self::validate_context(context_system::instance());
         $filters = new StdClass;
         $filters->search = $search;
@@ -140,6 +157,12 @@ class repository_zatuk_external extends external_api {
      * @return  array
      */
     public static function get_video_url($videoid) {
+        $params = self::validate_parameters(
+            self::get_video_url_parameters(),
+            [
+                'videoid' => $videoid,
+            ]
+        );
         self::validate_context(context_system::instance());
         $videoservice = new video_service();
         $video = $videoservice->get_video($videoid);
@@ -188,8 +211,15 @@ class repository_zatuk_external extends external_api {
     /**
      * Returns enable response.
      * @param array $value
+     * @return array
      */
     public static function enable_zatuk($value = '') {
+        $params = self::validate_parameters(
+            self::enable_zatuk_parameters(),
+            [
+                'value' => $value,
+            ]
+        );
         self::validate_context(context_system::instance());
         $enablezatuk = new video_service();
         $response = $enablezatuk->enablezatuk();
@@ -203,7 +233,7 @@ class repository_zatuk_external extends external_api {
         ];
     }
     /**
-     *  Describes the enable_zatuk return value.
+     * Describes the enable_zatuk return value.
      * @return external_single_structure
      */
     public static function enable_zatuk_returns() {
@@ -236,10 +266,11 @@ class repository_zatuk_external extends external_api {
      * @param string||null $organisationcode
      * @param string||null $email
      * @param string||null $name
+     * @return array
      */
     public static function zatukplans($organization='', $zatukapiurl='', $organisationcode='', $email='', $name='') {
 
-         $params = self::validate_parameters(
+        $params = self::validate_parameters(
             self::zatukplans_parameters(),
             [
                 'organization' => $organization,
@@ -306,6 +337,7 @@ class repository_zatuk_external extends external_api {
      * @param array $organization
      * @param array $email
      * @param array $name
+     * @return bool
      */
     public static function updatezatuksettings($organization='', $email='', $name='') {
 

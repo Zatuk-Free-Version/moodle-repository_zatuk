@@ -27,9 +27,9 @@ defined('MOODLE_INTERNAL') || die();
 $capabilities = [
     'repository/zatuk:view' => [
         'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
+        'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => [
-            'user' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
         ],
     ],
 ];
