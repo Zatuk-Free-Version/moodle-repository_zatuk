@@ -26,7 +26,6 @@ namespace repository_zatuk;
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/filelib.php');
 use curl;
-
 /**
  * [app_service description]
  */
@@ -54,12 +53,12 @@ class app_service {
      */
     protected $endpoints;
     /**
-     * @var array $session
+     * @var \stdClass $session
      */
     protected $session;
 
     /**
-     * Main Constructor
+     * Main constructor for api service.
      * @param string $clientid
      * @param string $clientsecret
      */
@@ -72,7 +71,7 @@ class app_service {
     }
 
     /**
-     * Sets Access token to session
+     * Sets Access token to session.
      * @param string $token
      */
     protected function set_access_token($token) {
@@ -80,7 +79,7 @@ class app_service {
     }
 
     /**
-     * Retrives Access token from session variable if valid or generates a new one
+     * Retrives Access token from session variable if valid or generates a new one.
      * @return string $accesstoken
      */
     protected function get_access_token() {
@@ -94,7 +93,7 @@ class app_service {
     }
 
     /**
-     * Checks if token is expired
+     * Checks if token is expired.
      * @return boolean
      */
     protected function is_token_expired() {
@@ -102,7 +101,7 @@ class app_service {
     }
 
     /**
-     * Checks if session has valid access token
+     * Checks if session has valid access token.
      * @return boolean
      */
     protected function has_access_token() {
@@ -110,7 +109,7 @@ class app_service {
     }
 
     /**
-     * Sets token expiry time
+     * Sets token expiry time.
      * @param array $time
      * @return null
      */
@@ -119,7 +118,7 @@ class app_service {
     }
 
     /**
-     * Gets token expiry time
+     * Gets token expiry time.
      * @return int $tokenexpiresat
      */
     protected function get_expires_at() {
@@ -127,7 +126,7 @@ class app_service {
     }
 
     /**
-     * Triggers an api call and retrives information from api
+     * Triggers an api call and retrives information from api.
      * @param string $endpoint
      * @param array $payload
      * @param array $urlparams
@@ -180,7 +179,7 @@ class app_service {
     }
 
     /**
-     * Gets endpoint information
+     * Gets endpoint information.
      * @param string $endpoint
      * @param array $urlparams
      * @return array $data
@@ -196,7 +195,7 @@ class app_service {
     }
 
     /**
-     * List of available endpoints
+     * List of available endpoints.
      * @return array $endpoints
      */
     protected function available_endpoints() {
@@ -237,7 +236,7 @@ class app_service {
     }
 
     /**
-     * Generates Access token
+     * Generates Access token.
      * @return array $response
      */
     protected function generate_access_token() {
@@ -255,7 +254,7 @@ class app_service {
     }
 
     /**
-     * Upgrades packages
+     * Upgrades packages.
      * @param string $name
      * @param string $email
      * @param string $mdltoken
@@ -278,7 +277,7 @@ class app_service {
         return $response;
     }
     /**
-     * Get Video Information from Zatuk
+     * Get Video Information from Zatuk.
      * @param array $params
      * @return array $response
      */
@@ -291,7 +290,7 @@ class app_service {
     }
 
     /**
-     * Get Video Information from Zatuk
+     * Get Video Information from Zatuk.
      * @param string $videoid
      * @return array $response
      */
@@ -304,7 +303,7 @@ class app_service {
     }
 
     /**
-     * Gets encryption key for the uploaded video
+     * Gets encryption key for the uploaded video.
      * @param string $url
      * @return array $response
      */
@@ -317,7 +316,7 @@ class app_service {
     }
 
     /**
-     * Uploads videos
+     * Uploads videos.
      * @param array $payload
      * @return array $response
      */

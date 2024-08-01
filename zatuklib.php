@@ -48,10 +48,11 @@ class phpzatuk {
     public $apiurl;
 
     /**
-     * [__construct description]
+     * Main constructor
      * @param string $apiurl
      * @param string $clientid
      * @param string $secret
+     * @return void
      */
     public function __construct($apiurl, $clientid, $secret) {
         global $CFG;
@@ -63,13 +64,15 @@ class phpzatuk {
         $this->xauthtoken = '';
     }
     /**
-     * [createsearchapiurl description]
+     * get search url from api.
+     * @return string
      */
     public function createsearchapiurl() {
         return $this->apiurl."/api/v1/videos/index";
     }
     /**
-     * [get_listing_params description]
+     * get listing params from api.
+     * @return array
      */
     public function get_listing_params() {
         global $CFG;
@@ -88,8 +91,9 @@ class phpzatuk {
         return $params;
     }
     /**
-     * [get_encryption_token description]
+     * get zatuk encryptiontoken from api.
      * @param array $url
+     * @return bool
      */
     public function get_encryption_token($url) {
         global $CFG;
@@ -103,13 +107,15 @@ class phpzatuk {
         return $content;
     }
     /**
-     * [createlistingapiurl description]
+     * get listing url from api.
+     * @return string
      */
     public function createlistingapiurl() {
         return $this->apiurl."/api/v1/videos/fvideos";
     }
     /**
-     * [get_upload_data description]
+     * get zatuk uploaded data from api.
+     * @return bool
      */
     public function get_upload_data() {
         $searchurl = $this->apiurl."/api/v1/videos/uploaddata";
@@ -121,8 +127,9 @@ class phpzatuk {
         return $content;
     }
     /**
-     * [get_videos description]
+     * get zatuk videos from api.
      * @param array $params
+     * @return array
      */
     public function get_videos($params) {
         $searchurl = $this->createsearchapiurl();

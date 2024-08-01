@@ -30,7 +30,7 @@ require_once($CFG->dirroot . '/repository/lib.php');
 require_once($CFG->dirroot.'/repository/zatuk/zatuklib.php');
 use repository_zatuk\app_service;
 /**
- * repository_zatuk
+ * zatuk repository plugin
  */
 class repository_zatuk extends repository {
 
@@ -57,10 +57,12 @@ class repository_zatuk extends repository {
      */
     protected $zatuk;
     /**
-     * [__construct description]
-     * @param int $repositoryid
-     * @param int|stdClass $context
-     * @param array $options
+     *  repository_zatuk constructor
+     *
+     * @param int $repositoryid repository instance id.
+     * @param int|stdClass $context a context id or context object.
+     * @param array $options repository options.
+     * @return void
      */
     public function __construct($repositoryid, $context = SYSCONTEXTID, $options = []) {
         parent::__construct($repositoryid, $context, $options);
@@ -73,7 +75,8 @@ class repository_zatuk extends repository {
     }
 
     /**
-     * Add plugin settings input to Moodle form.
+     * Edit/Create Admin Settings Moodle form.
+     *
      * @param object $mform
      * @param string $classname
      */
@@ -96,77 +99,86 @@ class repository_zatuk extends repository {
     }
 
     /**
-     * [type_form_validation description]
-     * @param array $mform
-     * @param array $data
-     * @param array $errors
-     */
-    public static function type_form_validation($mform, $data, $errors) {
-
-    }
-    /**
-     * [check_login description]
+     * Is this repository accessing after login?
+     *
+     * @return bool
      */
     public function check_login() {
         return true;
     }
     /**
-     * [supported_filetypes description]
+     * file types supported by url downloader plugin
+     *
+     * @return array
      */
     public function supported_filetypes() {
         return ['video'];
     }
     /**
-     * [contains_private_data description]
+     * Is this repository accessing private data?
+     *
+     * @return bool
      */
     public function contains_private_data() {
         return true;
     }
     /**
-     * [supported_returntypes description]
+     * Tells how the file can be picked from this repository
+     *
+     * Maximum value is FILE_INTERNAL | FILE_EXTERNAL | FILE_REFERENCE
+     *
+     * @return int
      */
     public function supported_returntypes() {
-        return FILE_EXTERNAL;
+        return (FILE_INTERNAL | FILE_EXTERNAL);
     }
     /**
-     * [has_moodle_files description]
+     * Does this repository used to browse moodle files?
+     *
+     * @return bool
      */
     public function has_moodle_files() {
         return false;
     }
     /**
-     * [search description]
-     * @param array $q
-     * @param array $page
+     * Search files in repository
+     * When doing global search, $search_text will be used as
+     * keyword.
+     *
+     * @param array $q search key word
+     * @param array $page page
+     * @return array
      */
     public function search($q, $page = 0) {
-        $ret  = [];
-        $ret['nologin'] = true;
-        $ret['page'] = (int)$page;
-        if ($ret['page'] < 1) {
-            $ret['page'] = 1;
+        $result  = [];
+        $result['nologin'] = true;
+        $result['page'] = (int)$page;
+        if ($result['page'] < 1) {
+            $result['page'] = 1;
         }
-        $start = ($ret['page'] - 1) * self::ZATUK_THUMBS_PER_PAGE + 1;
+        $start = ($result['page'] - 1) * self::ZATUK_THUMBS_PER_PAGE + 1;
         $start = $start - 1;
-        $searchurl = $this->zatuk->createSearchApiUrl();
+        $searchurl = $this->zatuk->createsearchapiurl();
         $params = $this->zatuk->get_listing_params();
         $params['q'] = $q;
         $params['perpage'] = self::ZATUK_THUMBS_PER_PAGE;
         $request = new curl();
         $content = $request->post($searchurl, $params);
         $content = json_decode($content, true);
-        $ret['list'] = $this->get_collection($content);
-        $ret['norefresh'] = true;
-        $ret['nosearch'] = false;
-        $ret['total'] = $content['meta']['total'];
-        $ret['pages'] = ceil($content['meta']['total'] / self::ZATUK_THUMBS_PER_PAGE);
-        $ret['perpage'] = self::ZATUK_THUMBS_PER_PAGE;
-        return $ret;
+        $result['list'] = $this->get_collection($content);
+        $result['norefresh'] = true;
+        $result['nosearch'] = false;
+        $result['total'] = $content['meta']['total'];
+        $result['pages'] = ceil($content['meta']['total'] / self::ZATUK_THUMBS_PER_PAGE);
+        $result['perpage'] = self::ZATUK_THUMBS_PER_PAGE;
+        return $result;
     }
+
     /**
-     * [get_collection description]
+     * Private method to get zatuk search results
+     *
      * @param array $content [description]
-     * Private method to get video list
+     * @return array
      */
     private function get_collection($content) {
         $list = [];
@@ -191,9 +203,13 @@ class repository_zatuk extends repository {
         return $list;
     }
     /**
-     * return list
-     * @param array $path
-     * @param array $page
+     * Given a path, and perhaps a search, get a list of files.
+     *
+     * See details on {@link http://docs.moodle.org/dev/Repository_plugins}
+     *
+     * @param string $path this parameter can a folder name, or a identification of folder
+     * @param string $page the page number of file list
+     * @return array the list of files
      */
     public function get_listing($path='', $page = '') {
         global $OUTPUT;
