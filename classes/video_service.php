@@ -57,14 +57,14 @@ class video_service {
      */
     public $statuses;
     /**
-     * @var array $service;
+     * @var \stdClass $service;
      */
     public $service;
 
 
 
     /**
-     * Main Constructor
+     * Main constructor for video service.
      * @param string $reference
      * @param integer $userid
      */
@@ -81,7 +81,7 @@ class video_service {
     }
 
     /**
-     * Get list of uploaded videos
+     * Get list of uploaded videos.
      * @param object $params
      * @return array $videos
      */
@@ -118,7 +118,7 @@ class video_service {
     }
 
     /**
-     * Formats Videos
+     * Formats Video response.
      * @param array $results
      * @return array $videos
      */
@@ -141,7 +141,7 @@ class video_service {
     }
 
     /**
-     * Saves uploaded video information in database
+     * Saves uploaded video information in database.
      * @param object $video
      * @return integer $id
      */
@@ -164,7 +164,7 @@ class video_service {
     }
 
     /**
-     * Uploads all the uploaded videos to zatuk
+     * Uploads all the uploaded videos to zatuk.
      *
      * @return array $response
      */
@@ -206,7 +206,7 @@ class video_service {
     }
 
     /**
-     * Get single video information
+     * Get single video information.
      * @param string $videoid
      * @return array $video
      */
@@ -216,7 +216,7 @@ class video_service {
     }
 
     /**
-     * Updates the status of uploaded videos
+     * Updates the status of uploaded videos.
      * @param integer $id
      * @param integer $status
      * @return integer
@@ -229,7 +229,7 @@ class video_service {
     }
 
     /**
-     * Gets encryption key
+     * Gets encryption key.
      * @param string $url
      * @return string $key
      */
@@ -239,7 +239,7 @@ class video_service {
     }
 
     /**
-     * Gets file Object from Moodle Data
+     * Gets file Object from Moodle Data.
      * @param integer $fileid
      * @param integer $filetype
      * @return object $file
@@ -251,7 +251,7 @@ class video_service {
     }
 
     /**
-     * Gets reference id
+     * Gets reference id.
      * @param object $data
      * @return integer $referenceid
      */
@@ -270,7 +270,8 @@ class video_service {
         return $referenceid;
     }
     /**
-     * Get response
+     * Enable zatuk respotiroy.
+     * @return bool
      */
     public function enablezatuk() {
         global $DB, $USER;
@@ -298,8 +299,9 @@ class video_service {
         }
     }
     /**
-     * Get record
+     * Getting zatuk plan record.
      * @param object $stabel
+     * @return stdclass
      */
     public function zatukingplan($stabel) {
         global $CFG, $DB, $USER, $PAGE, $OUTPUT, $SESSION;
@@ -366,8 +368,9 @@ class video_service {
         return $response;
     }
     /**
-     * Get true
+     * Describes the zatuk settings updation.
      * @param object $data
+     * @return bool
      */
     public function updatezatuksetting($data) {
         global $DB, $USER;

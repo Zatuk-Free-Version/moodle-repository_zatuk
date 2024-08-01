@@ -46,7 +46,11 @@ $string['emailaddress'] = 'Email';
 $string['errormessage']  = 'Please check site configuration settings.';
 $string['eventget_videos'] = 'Get Videos';
 $string['eventgetvideosvalue'] = 'Videos value';
+$string['finaltrailmessage']  = '<div class="d-flex justify-content-center align-items-center
+                        flex-column w-100 p-3 zatukconfirmationdialogue_content">
+                        <div class="icon"></div><h4 class="my-3">{$a}</h4></div>';
 $string['free']  = 'Free';
+$string['freetrailmessage']  = 'Thank you for choosing free trail!';
 $string['generatetoken'] = 'Generate Token';
 $string['generatetokenconfirm'] = 'Are you sure you want to generate token?';
 $string['get_started']  = 'Get started';
@@ -111,6 +115,7 @@ $string['tags_help'] = '';
 $string['thumbnail'] = 'Video thumbnail';
 $string['thumbnail_help'] = '';
 $string['token'] = 'Token';
+$string['updatemessage']  = 'Updated successfully';
 $string['upgrade'] = 'Upgrade';
 $string['upload_videos']  = 'Upload videos';
 $string['uploadeddate'] = 'Uploaded date';
@@ -136,7 +141,6 @@ $string['zatuk_key_content']  = 'Zatuk key content';
 $string['zatuk_key_content_help']  = 'Zatuk key content help';
 $string['zatuk_secret']  = 'Zatuk secret';
 $string['zatuk_secret_content']  = 'Zatuk secret content';
-$string['zatuk_secret_content']  = 'Zatuk secret';
 $string['zatuk_secret_content_help']  = 'Zatuk secret content help';
 $string['zatuksettings']  = 'Submit';
 $string['zatuksettingsupdate']  = 'Update';

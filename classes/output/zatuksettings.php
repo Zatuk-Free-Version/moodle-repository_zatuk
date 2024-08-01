@@ -42,15 +42,16 @@ class zatuksettings implements renderable, templatable {
      */
     protected $service;
     /**
-     * [__construct description]
+     * Zatuk settings constructor.
      * @param \context $context
      */
     public function __construct($context) {
 
     }
     /**
-     * [export_for_template description]
+     * Describes zatuk settings template.
      * @param renderer_base $output
+     * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
         global $CFG, $USER;
