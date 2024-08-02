@@ -25,7 +25,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 define('MOODLE_ZATUK_WEB_SERVICE', 'zatuk_web_service');
-require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->dirroot . '/repository/lib.php');
 require_once($CFG->dirroot.'/repository/zatuk/zatuklib.php');
 use repository_zatuk\app_service;
