@@ -27,12 +27,14 @@ use repository_zatuk\output\zatuksettings;
 use repository_zatuk\output\zatukconfiguration;
 
 /**
- * repository_zatuk_renderer
+ *  Zatuk repository renderer class.
  */
 class repository_zatuk_renderer extends plugin_renderer_base {
+
     /**
-     * render_zatuksettings
+     * Renders the repository zatuk settinfs.
      * @param zatuksettings $output
+     * @return bool|string the rendered output
      */
     public function render_zatuksettings(zatuksettings $output) {
         return $this->render_from_template('repository_zatuk/zatuk_view', $output->export_for_template($this));

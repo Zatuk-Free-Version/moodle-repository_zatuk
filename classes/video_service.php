@@ -57,7 +57,7 @@ class video_service {
      */
     public $statuses;
     /**
-     * @var \stdClass $service;
+     * @var stdClass|array $service;
      */
     public $service;
 

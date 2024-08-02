@@ -78,6 +78,7 @@ class repository_zatuk extends repository {
      *
      * @param object $mform
      * @param string $classname
+     * @return void
      */
     public static function type_config_form($mform, $classname = 'repository') {
         global $OUTPUT, $CFG, $PAGE;
