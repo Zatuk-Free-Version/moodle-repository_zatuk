@@ -25,8 +25,6 @@
 defined('MOODLE_INTERNAL') || die;
 require_once("$CFG->libdir/externallib.php");
 use repository_zatuk\video_service;
-
-
 /**
  * repository_zatuk_external
  */

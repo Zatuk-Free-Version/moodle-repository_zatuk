@@ -92,8 +92,6 @@ $functions = [
         'loginrequired' => true,
     ],
 ];
-
-
 $services = [
    'Zatuk Webservices'  => [
         'functions' => [], // Unused as we add the service in each function definition, third party services would use this.

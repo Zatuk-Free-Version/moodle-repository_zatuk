@@ -30,7 +30,6 @@ use repository_zatuk\output\zatukconfiguration;
  * repository_zatuk_renderer
  */
 class repository_zatuk_renderer extends plugin_renderer_base {
-
     /**
      * render_zatuksettings
      * @param zatuksettings $output
