@@ -53,7 +53,7 @@ class app_service {
      */
     protected $endpoints;
     /**
-     * @var \stdClass $session
+     * @var \stdClass|array $session
      */
     protected $session;
 
@@ -254,7 +254,7 @@ class app_service {
     }
 
     /**
-     * Upgrades packages.
+     * Upgrade package.
      * @param string $name
      * @param string $email
      * @param string $mdltoken

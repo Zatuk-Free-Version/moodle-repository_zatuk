@@ -93,7 +93,7 @@ class phpzatuk {
     /**
      * get zatuk encryptiontoken from api.
      * @param array $url
-     * @return bool
+     * @return array|string
      */
     public function get_encryption_token($url) {
         global $CFG;
@@ -115,7 +115,7 @@ class phpzatuk {
     }
     /**
      * get zatuk uploaded data from api.
-     * @return bool
+     * @return array|string
      */
     public function get_upload_data() {
         $searchurl = $this->apiurl."/api/v1/videos/uploaddata";
