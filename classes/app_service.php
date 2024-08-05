@@ -53,7 +53,7 @@ class app_service {
      */
     protected $endpoints;
     /**
-     * @var \stdClass|array $session
+     * @var \stdClass|array|string $session
      */
     protected $session;
 
