@@ -26,7 +26,7 @@ namespace repository_zatuk\event;
 use moodle_url;
 
 /**
- * get_videos
+ * Class get_videos
  */
 class get_videos extends \core\event\base {
 
