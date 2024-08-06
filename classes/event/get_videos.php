@@ -26,7 +26,7 @@ namespace repository_zatuk\event;
 use moodle_url;
 
 /**
- * get_videos
+ * Class get_videos
  */
 class get_videos extends \core\event\base {
 
@@ -55,7 +55,7 @@ class get_videos extends \core\event\base {
     }
     /**
      * get_url method
-     * @return string
+     * @return \moodle_url
      */
     public function get_url() {
         return new moodle_url('/course/modedit.php?add=zatuk',

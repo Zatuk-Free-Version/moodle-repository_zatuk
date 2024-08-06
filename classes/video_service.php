@@ -29,7 +29,7 @@ use context_system;
 use repository_zatuk\app_service;
 require_once("$CFG->libdir/externallib.php");
 /**
- * video_service
+ * Class video_service
  */
 class video_service {
 
