@@ -32,7 +32,7 @@ require_once($CFG->dirroot.'/lib/formslib.php');
 class configurationform extends \moodleform {
 
     /**
-     * [definition description]
+     * Define this form - called by the parent constructor
      */
     public function definition() {
         global $USER;
