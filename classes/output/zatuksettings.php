@@ -30,7 +30,7 @@ use templatable;
 use stdClass;
 use repository_zatuk\form\configurationform;
 /**
- * videos
+ * Class zatuksettings
  */
 class zatuksettings implements renderable, templatable {
     /**

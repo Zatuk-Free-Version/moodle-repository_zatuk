@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/filelib.php');
 use curl;
 /**
- * [app_service description]
+ * Class app_service
  */
 class app_service {
 
