@@ -1,4 +1,3 @@
-<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,20 +14,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file is used to get encryption key.
+ * Defines zatuk configuration script.
  *
  * @since      Moodle 2.0
- * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+import {get_string as getString} from 'core/str';
+import ModalFactory from 'core/modal_factory';
 
-require_once('../../config.php');
-global $CFG;
-require_login();
-require_capability('repository/zatuk:view', context_system::instance());
-use repository_zatuk\video_service;
-$url = required_param('uri', PARAM_RAW);
-$videoservice = new video_service();
-$encryptionkey = $videoservice->encryption_key($url);
-echo $encryptionkey;
+export default class MessageModal {
+    confirmbox(message) {
+        ModalFactory.create({
+            body: message,
+            type: ModalFactory.types.ALERT,
+            buttons: {
+                cancel: getString('ok'),
+            },
+            removeOnClose: true,
+        }).done(function(modal) {
+            modal.show();
+        });
+    }
+}

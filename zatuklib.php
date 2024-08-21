@@ -78,17 +78,22 @@ class phpzatuk {
         global $CFG;
         $tokenurl = $this->apiurl."/api/v1/apis/token";
         $c = new curl();
-        $tokenjson = $c->post($tokenurl, ['key' => $this->clientid, 'secret' => $this->secret, 'domain' => $CFG->wwwroot]);
-        $tokeninfo = json_decode($tokenjson);
-        if ($tokeninfo ) {
-            $token = $tokeninfo->token;
-            $params = ['token' => $token];
-        } else {
+        try {
+            $tokenjson = $c->post($tokenurl, ['key' => $this->clientid, 'secret' => $this->secret, 'domain' => $CFG->wwwroot]);
+            $tokeninfo = json_decode($tokenjson);
+            if ($tokeninfo ) {
+                $token = $tokeninfo->token;
+                $params = ['token' => $token];
+            } else {
 
-            $params = ['token' => ''];
+                $params = ['token' => ''];
+            }
+
+            return $params;
+        } catch (\Exception $e) {
+            throw new moodle_exception($e->getMessage());
         }
 
-        return $params;
     }
     /**
      * get zatuk encryptiontoken from api.
@@ -103,8 +108,12 @@ class phpzatuk {
         $params['key'] = $this->clientid;
         $params['secret'] = $this->secret;
         $params['uri'] = $url;
-        $content = $c->get($encryptionurl, $params);
-        return $content;
+        try {
+            $content = $c->post($searchurl, $params);
+            return $content;
+        } catch (\Exception $e) {
+            throw new moodle_exception($e->getMessage());
+        }
     }
     /**
      * get listing url from api.
@@ -123,8 +132,12 @@ class phpzatuk {
         $params = $this->get_listing_params();
         $params['key'] = $this->clientid;
         $params['secret'] = $this->secret;
-        $content = $c->post($searchurl, $params);
-        return $content;
+        try {
+            $content = $c->post($searchurl, $params);
+            return $content;
+        } catch (\Exception $e) {
+            throw new moodle_exception($e->getMessage());
+        }
     }
     /**
      * get zatuk videos from api.
@@ -136,8 +149,13 @@ class phpzatuk {
         $curlparams = $this->get_listing_params();
         $params = array_merge($curlparams, $params);
         $c = new curl();
-        $content = $c->post($searchurl, $params);
-        $content = json_decode($content, true);
-        return $content;
+        try {
+            $content = $c->post($searchurl, $params);
+            $content = json_decode($content, true);
+            return $content;
+
+        } catch (\Exception $e) {
+            throw new moodle_exception($e->getMessage());
+        }
     }
 }

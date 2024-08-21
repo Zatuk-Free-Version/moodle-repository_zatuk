@@ -280,15 +280,15 @@ class repository_zatuk_external extends external_api {
         );
         self::validate_context(context_system::instance());
         $data = [];
-        $stable = new stdClass();
-        $stable->email = $email;
-        $stable->name = $name;
-        $stable->organisationcode = $organisationcode;
-        $stable->zatuk_api_url = $zatukapiurl;
-        $stable->organization = $organization;
+        $sdata = new stdClass();
+        $sdata->email = $email;
+        $sdata->name = $name;
+        $sdata->organisationcode = $organisationcode;
+        $sdata->zatuk_api_url = $zatukapiurl;
+        $sdata->organization = $organization;
         set_config('zatuk_api_url', $zatukapiurl, 'repository_zatuk');
         $zatukplans = new video_service();
-        $response = $zatukplans->zatukingplan($stable);
+        $response = $zatukplans->zatukingplan($sdata);
         $arr = json_decode(json_encode ($response->errors ) , true);
         foreach ($arr as $key => $value) {
             $errors[$key] = json_decode(json_encode ($value[0]) , true);
@@ -348,12 +348,12 @@ class repository_zatuk_external extends external_api {
             ]
         );
         self::validate_context(context_system::instance());
-        $stable = new stdClass();
-        $stable->email = $email;
-        $stable->name = $name;
-        $stable->organization = $organization;
+        $sdata = new stdClass();
+        $sdata->email = $email;
+        $sdata->name = $name;
+        $sdata->organization = $organization;
         $updatezatuksettings = new video_service();
-        $response = $updatezatuksettings->updatezatuksetting($stable);
+        $response = $updatezatuksettings->updatezatuksetting($sdata);
         return $response;
     }
     /**

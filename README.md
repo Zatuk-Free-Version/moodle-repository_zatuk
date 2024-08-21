@@ -26,6 +26,19 @@
 # Requirements:
     Based on moodle version user need to install the compatiable zatuk plugin.
 
+    To generate unique secret keys and authentication tokens, please follow these steps:
+
+    1. Navigate to Site Administration > Plugins > Manage Repositories.
+    2. Select "Enable and Visible" for the Zatuk Plugin.
+    3. You will be redirected to a page with basic information for creating an organization in the Zatuk streaming 
+       application. Click on "Next".
+    4. To proceed, choose between two options: Free Subscription or Paid Subscription.
+       Free Subscription: Includes basic setup and video streaming.
+       Paid Subscription: Includes advanced features such as analytics, video ratings, likes, and dislikes.
+    5. After selecting your subscription, click on "Get Started". The key and secret token will be generated.
+    
+    This process will set up the necessary credentials for secure integration between Zatuk and your LMS.
+
 # How to install:
 
     1. Click on Site Administration from the navigation block.
