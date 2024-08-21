@@ -28,13 +28,17 @@ define('MOODLE_ZATUK_WEB_SERVICE', 'zatuk_web_service');
 require_once($CFG->dirroot . '/repository/lib.php');
 require_once($CFG->dirroot.'/repository/zatuk/zatuklib.php');
 use repository_zatuk\app_service;
+define ('COLLECTION_THUMBNAIL_WIDTH', 150);
+define ('COLLECTION_THUMBNAIL_HEIGHT', 150);
+define ('COLLECTION_SIZE', '1 * 1024 * 1024');
+define ('LISTING_THUMBNAIL_WIDTH', 150);
+define ('LISTING_THUMBNAIL_HEIGHT', 150);
+define ('ZATUK_THUMBS_PER_PAGE', 10);
 /**
  * zatuk repository plugin
  */
 class repository_zatuk extends repository {
 
-    /** Number of videos to load per page */
-    const ZATUK_THUMBS_PER_PAGE = 10;
     /**
      * @var array $service
      */
@@ -63,7 +67,7 @@ class repository_zatuk extends repository {
      * @param array $options repository options.
      * @return void
      */
-    public function __construct($repositoryid, $context = SYSCONTEXTID, $options = []) {
+    public function __construct($repositoryid, $context, $options = []) {
         parent::__construct($repositoryid, $context, $options);
         $this->zatukkey = get_config('repository_zatuk', 'zatuk_key');
         $this->zatukapiurl = get_config('repository_zatuk', 'zatuk_api_url');
@@ -82,8 +86,6 @@ class repository_zatuk extends repository {
      */
     public static function type_config_form($mform, $classname = 'repository') {
         global $OUTPUT, $CFG, $PAGE;
-        purge_caches();
-        require_login();
         $systemcontext = context_system::instance();
         $zatukkey = get_config('repository_zatuk', 'zatuk_key');
         $zatuksecret = get_config('repository_zatuk', 'zatuk_secret');
@@ -91,7 +93,6 @@ class repository_zatuk extends repository {
         if ($zatuksecret == "" && $zatukkey == "") {
             $render = new repository_zatuk\output\zatuksettings($systemcontext);
             $mform->addElement('html', html_writer::tag('div', $renderer->render($render)));
-
         } else {
             $render = new repository_zatuk\output\zatukconfiguration($systemcontext);
             $mform->addElement('html', html_writer::tag('div', $renderer->render($render)));
@@ -149,29 +150,34 @@ class repository_zatuk extends repository {
      * @param array $page page
      * @return array
      */
-    public function search($q, $page = 0) {
+    public function search($q, $page = []) {
         $result  = [];
         $result['nologin'] = true;
         $result['page'] = (int)$page;
         if ($result['page'] < 1) {
             $result['page'] = 1;
         }
-        $start = ($result['page'] - 1) * self::ZATUK_THUMBS_PER_PAGE + 1;
+        $start = ($result['page'] - 1) * ZATUK_THUMBS_PER_PAGE + 1;
         $start = $start - 1;
         $searchurl = $this->zatuk->createsearchapiurl();
         $params = $this->zatuk->get_listing_params();
         $params['q'] = $q;
-        $params['perpage'] = self::ZATUK_THUMBS_PER_PAGE;
+        $params['perpage'] = ZATUK_THUMBS_PER_PAGE;
         $request = new curl();
-        $content = $request->post($searchurl, $params);
-        $content = json_decode($content, true);
-        $result['list'] = $this->get_collection($content);
-        $result['norefresh'] = true;
-        $result['nosearch'] = false;
-        $result['total'] = $content['meta']['total'];
-        $result['pages'] = ceil($content['meta']['total'] / self::ZATUK_THUMBS_PER_PAGE);
-        $result['perpage'] = self::ZATUK_THUMBS_PER_PAGE;
-        return $result;
+        try {
+            $content = $request->post($searchurl, $params);
+            $content = json_decode($content, true);
+            $result['list'] = $this->get_collection($content);
+            $result['norefresh'] = true;
+            $result['nosearch'] = false;
+            $result['total'] = $content['meta']['total'];
+            $result['pages'] = ceil($content['meta']['total'] / ZATUK_THUMBS_PER_PAGE);
+            $result['perpage'] = ZATUK_THUMBS_PER_PAGE;
+            return $result;
+        } catch (\Exception $e) {
+            throw new moodle_exception($e->getMessage());
+        }
+
     }
 
     /**
@@ -190,9 +196,9 @@ class repository_zatuk extends repository {
                     'title' => $entry['title'].'.avi', // This is a hack so we accept this file by extension.
                     'thumbnail' => $this->zatukapiurl.stripslashes($entry['thumbnail']),
                     'videoid' => stripslashes($entry['videoid']),
-                    'thumbnail_width' => 150,
-                    'thumbnail_height' => 150,
-                    'size' => 1 * 1024 * 1024,
+                    'thumbnail_width' => COLLECTION_THUMBNAIL_WIDTH,
+                    'thumbnail_height' => COLLECTION_THUMBNAIL_HEIGHT,
+                    'size' => COLLECTION_SIZE,
                     'date' => strtotime($entry['timecreated']),
                     'license' => 'unknown',
                     'author' => $entry['usercreated'],
@@ -227,8 +233,9 @@ class repository_zatuk extends repository {
         $fileslist = $content['fvideos'];
         $return = ['dynload' => true, 'nosearch' => false, 'nologin' => true];
         foreach ($content['navPath'] as $paths) {
+            $iconsize = 96;
             $pathelement = [
-                'icon' => $OUTPUT->image_url(file_folder_icon(90))->out(false),
+                'icon' => $OUTPUT->image_url(file_folder_icon($iconsize))->out(false),
                 'path' => $paths['navpathdata'],
                 'name' => $paths['name'],
             ];
@@ -239,8 +246,8 @@ class repository_zatuk extends repository {
         foreach ($folderlists as $folders) {
             $listelement = [];
             $listelement['thumbnail'] = $folderurl;
-            $listelement['thumbnail_width'] = 90;
-            $listelement['thumbnail_height'] = 90;
+            $listelement['thumbnail_width'] = LISTING_THUMBNAIL_WIDTH;
+            $listelement['thumbnail_height'] = LISTING_THUMBNAIL_HEIGHT;
             $listelement['title'] = $folders['fullname'];
             $listelement['path'] = $folders['path'];
             $listelement['children'] = [];
@@ -249,7 +256,7 @@ class repository_zatuk extends repository {
         foreach ($fileslist as $files) {
             $filecontent = [
                 'thumbnail' => $this->zatukapiurl.'/storage/'.$files['thumbnail'],
-                'title' => $files['title'].'.avi',
+                'title' => $files['title'],
                 'source' => $files['encodedurl'],
                 'date' => strtotime($files['timecreated']),
                 'license' => 'unknown',

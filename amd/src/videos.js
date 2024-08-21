@@ -21,21 +21,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 import Ajax from 'core/ajax';
-import {get_string as getString} from 'core/str';
-import ModalFactory from 'core/modal_factory';
-export const confirmbox = (message) => {
-     ModalFactory.create({
-        body: message,
-        type: ModalFactory.types.ALERT,
-        buttons: {
-            ok: getString('Thank_you'),
-        },
-        removeOnClose: true,
-      })
-      .done(function(modal) {
-        modal.show();
-      });
-};
+import messagemodal from 'repository_zatuk/messagemodal';
+let MessageModal = new messagemodal();
+
 const videos = (filters) => {
     let promise = Ajax.call([
         {
@@ -44,9 +32,9 @@ const videos = (filters) => {
         }
     ]);
     promise[0].done((response) => {
-       confirmbox(response);
+       MessageModal.confirmbox(response);
     }).fail( (error) => {
-      confirmbox(error);
+      MessageModal.confirmbox(error);
     });
 };
 export default { videos };

@@ -51,7 +51,7 @@ class get_videos_value extends \core\event\base {
      * @return string
      */
     public function get_description() {
-         return get_string('laravelvideos', 'repository_zatuk', [$this->objectid]);
+         return get_string('zatukvideos', 'repository_zatuk', [$this->objectid]);
     }
     /**
      * get_url method

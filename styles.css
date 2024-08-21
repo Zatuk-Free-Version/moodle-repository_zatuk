@@ -5,7 +5,7 @@
 }
 
 #page-admin-repository-zatuk .zatuklogo {
-    background-image: url('[[pix:repository_zatuk|logo_z]]');
+    background-image: url('[[pix:repository_zatuk|logo_zatuk]]');
     background-repeat: no-repeat;
     background-size: cover;
     width: 252px;
@@ -110,7 +110,7 @@
 }
 
 .zatukconfirmationdialogue_content .icon {
-    background-image: url('[[pix:repository_zatuk|thank_you]]');
+    background-image: url('[[pix:repository_zatuk|zatuk_success]]');
     background-position: center;
     background-size: 100%;
     background-repeat: no-repeat;

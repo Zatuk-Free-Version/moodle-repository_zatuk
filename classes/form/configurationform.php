@@ -73,12 +73,12 @@ class configurationform extends \moodleform {
             $zatukapiurl = "https://stream2dev.zatuk.com";
         }
 
-        $mform->addElement('text', 'name', get_string('name', 'repository_zatuk'), ['value' => $name]);
+        $mform->addElement('text', 'name', get_string('name'), ['value' => $name]);
         $mform->setType('name', PARAM_RAW_TRIMMED);
         $mform->addHelpButton('name', 'name_content', 'repository_zatuk');
         $mform->addRule('name', get_string('required', 'repository_zatuk'), 'required', null, 'client');
 
-        $mform->addElement('text', 'email', get_string('email', 'repository_zatuk'), ['value' => $email]);
+        $mform->addElement('text', 'email', get_string('email'), ['value' => $email]);
         $mform->setType('email', PARAM_RAW_TRIMMED);
         $mform->addHelpButton('email', 'email_content', 'repository_zatuk');
         $mform->addRule('email', get_string('required', 'repository_zatuk'), 'required', null, 'client');

@@ -26,21 +26,9 @@ import ModalFactory from 'core/modal_factory';
 import ModalEvents from 'core/modal_events';
 import Templates from 'core/templates';
 import videojs from 'media_videojs/video-lazy';
-import {get_string as getString} from 'core/str';
+import messagemodal from 'repository_zatuk/messagemodal';
 
-export const confirmbox = (message) => {
-     ModalFactory.create({
-        body: message,
-        type: ModalFactory.types.ALERT,
-        buttons: {
-            ok: getString('Thank_you'),
-        },
-        removeOnClose: true,
-      })
-      .done(function(modal) {
-        modal.show();
-      });
-};
+let MessageModal = new messagemodal();
 export const play = ( root ) => {
     $(root).on('click', (e) => {
         e.preventDefault();
@@ -85,7 +73,7 @@ const get_video_url = (videoid) => {
 
         }
     }).fail((error) => {
-       confirmbox(error);
+       MessageModal.confirmbox(error);
     });
 };
 export default { play };

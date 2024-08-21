@@ -28,6 +28,7 @@ use stdClass;
 use context_system;
 use repository_zatuk\app_service;
 require_once("$CFG->libdir/externallib.php");
+define ('VISIBLE', 1);
 /**
  * Class video_service
  */
@@ -61,14 +62,12 @@ class video_service {
      */
     public $service;
 
-
-
     /**
      * Main constructor for video service.
      * @param string $reference
-     * @param integer $userid
+     * @param int $userid
      */
-    public function __construct($reference = '', $userid = '') {
+    public function __construct($reference = '', $userid = 0) {
         global $DB;
         $this->db = $DB;
 
@@ -192,7 +191,7 @@ class video_service {
                 'title'         => $video->title,
                 'filename'      => $video->filename,
                 'videoid'       => $video->videoid,
-                'description'   => get_string('description', 'repository_zatuk'),
+                'description'   => get_string('description'),
                 'tags'          => $video->tags,
                 'video'         => $videofile,
             ];
@@ -274,23 +273,22 @@ class video_service {
      * @return bool
      */
     public function enablezatuk() {
-        global $DB, $USER;
-
-        $repositoryenabled = $DB->record_exists('repository', ['type' => 'zatuk', 'visible' => 1]);
+        purge_caches();
+        $repositoryenabled = $this->db->record_exists('repository', ['type' => 'zatuk', 'visible' => VISIBLE]);
         if (!$repositoryenabled) {
             $row = [];
             $data = [];
             $row['type'] = 'zatuk';
-            $row['visible'] = 1;
-            $sortorder = $DB->get_record_sql("SELECT sortorder FROM {repository} ORDER BY ID DESC LIMIT 1");
+            $row['visible'] = VISIBLE;
+            $sortorder = $this->db->get_record_sql("SELECT sortorder FROM {repository} ORDER BY ID DESC LIMIT 1");
             $row['sortorder'] = $sortorder->sortorder + 1;
-            $record = $DB->insert_record('repository', $row);
+            $record = $this->db->insert_record('repository', $row);
             if ($record) {
                 $data['typeid'] = $record;
                 $data['contextid'] = 1;
                 $data['timecreated'] = time();
                 $data[' timemodified'] = time();
-                $DB->insert_record('repository_instances', $data);
+                $this->db->insert_record('repository_instances', $data);
             }
             return $record;
         } else {
@@ -300,25 +298,24 @@ class video_service {
     }
     /**
      * Getting zatuk plan record.
-     * @param object $stabel
+     * @param stdClass $sdata
      * @return stdclass
      */
-    public function zatukingplan($stabel) {
-        global $CFG, $DB, $USER, $PAGE, $OUTPUT, $SESSION;
+    public function zatukingplan($sdata) {
+        global $USER;
         $systemcontext = context_system::instance();
-        $organization = $stabel->organization;
-        $zatukapiurl = $stabel->zatuk_api_url;
-        $organisationcode = $stabel->organisationcode;
-        $email = $stabel->email;
-        $name = $stabel->name;
-        $service = $DB->get_record('external_services', ['shortname' => 'zatuk_web_service', 'enabled' => 1]);
+        $organization = $sdata->organization;
+        $organisationcode = $sdata->organisationcode;
+        $email = $sdata->email;
+        $name = $sdata->name;
+        $service = $this->db->get_record('external_services', ['shortname' => 'zatuk_web_service', 'enabled' => VISIBLE]);
         if ($service) {
             $conditions = [
             'userid' => $USER->id,
             'externalserviceid' => $service->id,
             'tokentype' => EXTERNAL_TOKEN_PERMANENT,
             ];
-            $existingtokens = $DB->get_record('external_tokens', $conditions, 'token', IGNORE_MISSING);
+            $existingtokens = $this->db->get_record('external_tokens', $conditions, 'token', IGNORE_MISSING);
             if ($existingtokens) {
                 $token = $existingtokens->token;
             } else {
@@ -369,15 +366,14 @@ class video_service {
     }
     /**
      * Describes the zatuk settings updation.
-     * @param object $data
+     * @param object $sdata
      * @return bool
      */
-    public function updatezatuksetting($data) {
-        global $DB, $USER;
+    public function updatezatuksetting($sdata) {
         $this->enablezatuk();
-        set_config('name', $data->name, 'repository_zatuk');
-        set_config('organization', $data->organization, 'repository_zatuk');
-        set_config('email', $data->email, 'repository_zatuk');
+        set_config('name', $sdata->name, 'repository_zatuk');
+        set_config('organization', $sdata->organization, 'repository_zatuk');
+        set_config('email', $sdata->email, 'repository_zatuk');
         return true;
     }
 }

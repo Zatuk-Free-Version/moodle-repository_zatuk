@@ -21,9 +21,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 import $ from 'jquery';
-import ModalFactory from 'core/modal_factory';
 import Ajax from 'core/ajax';
 import {get_string as getString} from 'core/str';
+import messagemodal from 'repository_zatuk/messagemodal';
 
 const Selectors = {
     actions: {
@@ -34,19 +34,9 @@ const Selectors = {
 
     },
 };
-export const confirmbox = (message) => {
-     ModalFactory.create({
-        body: message,
-        type: ModalFactory.types.ALERT,
-        buttons: {
-            ok: getString('Thank_you'),
-        },
-        removeOnClose: true,
-      })
-      .done(function(modal) {
-        modal.show();
-      });
-};
+
+let MessageModal = new messagemodal();
+
 export const init = () => {
     document.addEventListener('click', function(e) {
         let zatuksettings = e.target.closest(Selectors.actions.zatuksettings);
@@ -80,23 +70,34 @@ export const init = () => {
             }]);
             promise[0].done(function(resp) {
                 if(resp.success) {
-                    getString('freetrailmessage' ,'repository_zatuk').then((str) => {
-                        confirmbox(getString('finaltrailmessage','repository_zatuk',str));
+                    var params = {};
+                    params.value = null;
+                    var promise = Ajax.call([{
+                        methodname: 'repository_enable_zatuk',
+                        args: params
+                    }]);
+                    promise[0].done(function() {
+                        getString('freetrailmessage' ,'repository_zatuk').then((str) => {
+                            MessageModal.confirmbox(getString('finaltrailmessage','repository_zatuk',str));
+                        });
+                        $(".secret_keys").load(location.href + " .secret_keys");
+                        $('.section_container').addClass('d-none');
+                        $('.section_container.registration_keys').removeClass('d-none');
+                        $('.step-2').addClass('completed');
+                        $('.step-3').addClass('active');
+                    }).fail(function() {
+                        MessageModal.confirmbox(getString('exception'));
                     });
-                    $(".secret_keys").load(location.href + " .secret_keys");
-                    $('.section_container').addClass('d-none');
-                    $('.section_container.registration_keys').removeClass('d-none');
-                    $('.step-2').addClass('completed');
-                    $('.step-3').addClass('active');
+
                 } else {
                     if(resp.errormessage === null && resp.success === null) {
-                        confirmbox(getString('serverdown', 'repository_zatuk'));
+                        MessageModal.confirmbox(getString('serverdown', 'repository_zatuk'));
                     } else {
-                        confirmbox(resp.errormessage);
+                        MessageModal.confirmbox(resp.errormessage);
                     }
                 }
             }).fail(function() {
-                confirmbox(getString('errormessage', 'repository_zatuk'));
+                MessageModal.confirmbox(getString('errormessage', 'repository_zatuk'));
             });
         }
     });
@@ -104,17 +105,7 @@ export const init = () => {
         let zatukdetails = e.target.closest(Selectors.actions.zatukdetails);
         if (zatukdetails) {
             e.preventDefault();
-            var params = {};
-            params.value = null;
-            var promise = Ajax.call([{
-                methodname: 'repository_enable_zatuk',
-                args: params
-            }]);
-            promise[0].done(function() {
-                location.reload();
-            }).fail(function() {
-                confirmbox(getString('exception'));
-            });
+            location.reload();
         }
     });
     document.addEventListener('click', function(e) {
@@ -136,11 +127,11 @@ export const init = () => {
             promise[0].done(function(resp) {
                 if(resp) {
                     getString('updatemessage' ,'repository_zatuk').then((str) => {
-                        confirmbox(getString('finaltrailmessage','repository_zatuk',str));
+                        MessageModal.confirmbox(getString('finaltrailmessage','repository_zatuk',str));
                     });
                 }
             }).fail(function() {
-                confirmbox('exception');
+                MessageModal.confirmbox('exception');
             });
         }
     });
