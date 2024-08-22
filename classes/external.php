@@ -109,7 +109,7 @@ class repository_zatuk_external extends external_api {
         $filters->sort = $sorting;
         $filters->status = $status;
         $videoservice = new video_service();
-        $videos = $videoservice->index($filters);
+        $videos = $videoservice->get_uploaded_videos($filters);
         return $videos;
     }
     /**
