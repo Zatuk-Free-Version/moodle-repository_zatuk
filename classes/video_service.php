@@ -84,33 +84,33 @@ class video_service {
      * @param object $params
      * @return array $videos
      */
-    public function index($params) {
-        $sql = "SELECT rsv.id, rsv.*, u.username FROM {repository_zatuk_videos} rsv
-                  JOIN {user} u ON u.id = rsv.usercreated WHERE 1 = 1";
+    public function get_uploaded_videos($params) {
+        $sql = "SELECT rzv.id, rzv.*, u.username FROM {repository_zatuk_videos} rzv
+                  JOIN {user} u ON u.id = rzv.usercreated WHERE 1 = 1";
         $queryparams = [];
         if (!empty($params->search)) {
-            $sql .= " AND ".$this->db->sql_like('rsv.title', ':titlesearch', false)." ";
+            $sql .= " AND ".$this->db->sql_like('rzv.title', ':titlesearch', false)." ";
             $queryparams['titlesearch']  = '%'.$params->search.'%';
         }
 
         if (!empty($params->status)) {
-            $sql .= " AND rsv.status =:vstatus";
+            $sql .= " AND rzv.status =:vstatus";
             $queryparams['vstatus']  = $params->status;
         }
 
         if (!empty($params->user)) {
-            $sql .= " AND rsv.usercreated = :vuser";
+            $sql .= " AND rzv.usercreated = :vuser";
             $queryparams['vuser']  = $params->user;
         }
 
         if (!empty($params->sort)) {
             if ($params->sort == 'title') {
-                $sql .= " ORDER BY rsv.title ASC";
+                $sql .= " ORDER BY rzv.title ASC";
             } else if ($params->sort == 'datecreated') {
-                $sql .= " ORDER BY rsv.timecreated DESC";
+                $sql .= " ORDER BY rzv.timecreated DESC";
             }
         } else {
-            $sql .= " ORDER BY rsv.id DESC";
+            $sql .= " ORDER BY rzv.id DESC";
         }
         $results = $this->db->get_records_sql($sql, $queryparams);
         return $this->format_videos_response($results);
@@ -169,14 +169,14 @@ class video_service {
      */
     public function upload_videos_to_zatuk() {
         $response = [];
-        $sql = "SELECT rsv.id, rsv.videoid, f.id as fileid,
-        f.filename, rsv.title, rsv.description,
-        rsv.tags FROM {repository_zatuk_videos} rsv
-                  JOIN {files} f ON f.itemid = rsv.id
+        $sql = "SELECT rzv.id, rzv.videoid, f.id as fileid,
+        f.filename, rzv.title, rzv.description,
+        rzv.tags FROM {repository_zatuk_videos} rzv
+                  JOIN {files} f ON f.itemid = rzv.id
                  WHERE f.component = :component
                    AND f.filearea = :filearea
                    AND f.filename != :filename
-                   AND rsv.status = :status";
+                   AND rzv.status = :status";
 
         $videos = $this->db->get_records_sql($sql,
                     ['component' => 'repository_zatuk',
