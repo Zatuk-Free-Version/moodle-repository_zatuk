@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die;
-require_once("$CFG->libdir/externallib.php");
+require_once($CFG->libdir.'/externallib.php');
 use repository_zatuk\video_service;
 /**
  * repository_zatuk_external
