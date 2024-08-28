@@ -273,9 +273,9 @@ class video_service {
      * @return bool
      */
     public function enablezatuk() {
-        purge_caches();
-        $repositoryenabled = $this->db->record_exists('repository', ['type' => 'zatuk', 'visible' => VISIBLE]);
+        $repositoryenabled = $this->isrepositoryenabled();
         if (!$repositoryenabled) {
+            purge_caches();
             $row = [];
             $data = [];
             $row['type'] = 'zatuk';
@@ -292,9 +292,17 @@ class video_service {
             }
             return $record;
         } else {
-
             return $repositoryenabled;
         }
+    }
+    /**
+     * Check zatuk respotiroy enabled or not.
+     * @return bool
+     */
+    public function isrepositoryenabled() {
+
+        $result = $this->db->record_exists('repository', ['type' => 'zatuk', 'visible' => VISIBLE]);
+        return $result;
     }
     /**
      * Getting zatuk plan record.
