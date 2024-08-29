@@ -76,22 +76,27 @@ class phpzatuk {
      */
     public function get_listing_params() {
         global $CFG;
-        $tokenurl = $this->apiurl."/api/v1/apis/token";
-        $c = new curl();
-        try {
-            $tokenjson = $c->post($tokenurl, ['key' => $this->clientid, 'secret' => $this->secret, 'domain' => $CFG->wwwroot]);
-            $tokeninfo = json_decode($tokenjson);
-            if ($tokeninfo ) {
-                $token = $tokeninfo->token;
-                $params = ['token' => $token];
-            } else {
+        if ($this->apiurl) {
+            $tokenurl = $this->apiurl."/api/v1/apis/token";
+            $c = new curl();
+            try {
+                $tokenjson = $c->post($tokenurl, ['key' => $this->clientid, 'secret' => $this->secret, 'domain' => $CFG->wwwroot]);
+                $tokeninfo = json_decode($tokenjson);
+                if ($tokeninfo ) {
+                    $token = $tokeninfo->token;
+                    $params = ['token' => $token];
+                } else {
 
-                $params = ['token' => ''];
+                    $params = ['token' => ''];
+                }
+
+                return $params;
+            } catch (\Exception $e) {
+                throw new moodle_exception($e->getMessage());
             }
-
+        } else {
+            $params = ['token' => ''];
             return $params;
-        } catch (\Exception $e) {
-            throw new moodle_exception($e->getMessage());
         }
 
     }
@@ -149,13 +154,17 @@ class phpzatuk {
         $curlparams = $this->get_listing_params();
         $params = array_merge($curlparams, $params);
         $c = new curl();
-        try {
-            $content = $c->post($searchurl, $params);
-            $content = json_decode($content, true);
-            return $content;
+        if ($this->apiurl) {
+            try {
+                $content = $c->post($searchurl, $params);
+                $content = json_decode($content, true);
+                return $content;
 
-        } catch (\Exception $e) {
-            throw new moodle_exception($e->getMessage());
+            } catch (\Exception $e) {
+                throw new moodle_exception($e->getMessage());
+            }
+        } else {
+          return  [];
         }
     }
 }
