@@ -378,7 +378,6 @@ class video_service {
      * @return bool
      */
     public function updatezatuksetting($sdata) {
-        $this->enablezatuk();
         set_config('name', $sdata->name, 'repository_zatuk');
         set_config('organization', $sdata->organization, 'repository_zatuk');
         set_config('email', $sdata->email, 'repository_zatuk');
