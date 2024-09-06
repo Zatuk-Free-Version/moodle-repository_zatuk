@@ -17,7 +17,6 @@
 /**
  * This file is used to get encryption key.
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,9 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2022041900.11;
+$plugin->version = 2022041900.00;
 $plugin->requires = 2022041900.00; // Moodle 4.0.
-$plugin->supported = [400, 440];
+$plugin->supported = [400, 450];
 $plugin->component = 'repository_zatuk';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = '4.x (Build: 2022041900.00)';

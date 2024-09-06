@@ -16,7 +16,6 @@
 /**
  * Defines zatuk configuration script.
  *
- * @since      Moodle 2.0
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

@@ -15,18 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the definition for the class zatuk.
+ * repository_zatuk phpzatuk class.
  *
- * This class provides all the functionality for the new zatuk repository.
- *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define('HEX2BIN_WS', " \t\n\r");
+namespace repository_zatuk;
+
+use curl;
+use moodle_exception;
+use Exception;
+define ('VISIBLE', 1);
 /**
- * phpzatuk
+ * Class phpzatuk
  */
 class phpzatuk {
 
@@ -82,7 +84,7 @@ class phpzatuk {
             try {
                 $tokenjson = $c->post($tokenurl, ['key' => $this->clientid, 'secret' => $this->secret, 'domain' => $CFG->wwwroot]);
                 $tokeninfo = json_decode($tokenjson);
-                if ($tokeninfo ) {
+                if ($tokeninfo->success) {
                     $token = $tokeninfo->token;
                     $params = ['token' => $token];
                 } else {
@@ -91,7 +93,7 @@ class phpzatuk {
                 }
 
                 return $params;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new moodle_exception($e->getMessage());
             }
         } else {
@@ -106,8 +108,7 @@ class phpzatuk {
      * @return array|string
      */
     public function get_encryption_token($url) {
-        global $CFG;
-        $encryptionurl = $this->apiurl."/api/v1/videos/encryption";
+        $searchurl = $this->apiurl."/api/v1/videos/encryption";
         $c = new curl();
         $params = $this->get_listing_params();
         $params['key'] = $this->clientid;
@@ -116,7 +117,7 @@ class phpzatuk {
         try {
             $content = $c->post($searchurl, $params);
             return $content;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new moodle_exception($e->getMessage());
         }
     }
@@ -140,7 +141,7 @@ class phpzatuk {
         try {
             $content = $c->post($searchurl, $params);
             return $content;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new moodle_exception($e->getMessage());
         }
     }
@@ -160,11 +161,11 @@ class phpzatuk {
                 $content = json_decode($content, true);
                 return $content;
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new moodle_exception($e->getMessage());
             }
         } else {
-          return  [];
+            return  [];
         }
     }
 }

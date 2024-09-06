@@ -17,7 +17,6 @@
 /**
  * This file contains the moodle hooks for the zatuk repository.
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,8 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 define('MOODLE_ZATUK_WEB_SERVICE', 'zatuk_web_service');
 require_once($CFG->dirroot . '/repository/lib.php');
-require_once($CFG->dirroot.'/repository/zatuk/zatuklib.php');
 use repository_zatuk\app_service;
+use repository_zatuk\phpzatuk;
 define ('COLLECTION_THUMBNAIL_WIDTH', 150);
 define ('COLLECTION_THUMBNAIL_HEIGHT', 150);
 define ('COLLECTION_SIZE', '1 * 1024 * 1024');
@@ -70,7 +69,7 @@ class repository_zatuk extends repository {
     public function __construct($repositoryid, $context, $options = []) {
         parent::__construct($repositoryid, $context, $options);
         $this->zatukkey = get_config('repository_zatuk', 'zatuk_key');
-        $this->zatukapiurl = get_config('repository_zatuk', 'zatuk_api_url');
+        $this->zatukapiurl = get_config('repository_zatuk', 'zatukapiurl');
         $this->zatuksecret = get_config('repository_zatuk', 'zatuk_secret');
         $this->service = new app_service($this->zatukkey, $this->zatuksecret);
         $this->zatuk = new phpzatuk($this->zatukapiurl, $this->zatukkey, $this->zatuksecret);

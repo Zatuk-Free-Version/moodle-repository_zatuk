@@ -17,7 +17,6 @@
 /**
  * Language file.
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -37,12 +36,15 @@ $string['configplugin'] = 'Zatuk configuration';
 $string['configuration']  = 'Configuration';
 $string['confirmation']  = 'Confirmation';
 $string['description_help'] = 'Description';
-$string['email_content']  = 'Email content';
-$string['email_content_help']  = 'Email content help';
+$string['email_content']  = 'User email';
+$string['email_content_help']  = 'Email of the user for generating the configuration token.';
 $string['emailaddress'] = 'Email';
 $string['errormessage']  = 'Please check site configuration settings.';
 $string['eventget_videos'] = 'Get videos';
 $string['eventgetvideosvalue'] = 'Videos value';
+$string['failedwarningmessage']  = '<div class="d-flex justify-content-center align-items-center
+                        flex-column w-100 p-3 zatukconfirmationfaileddialogue_content">
+                        <div class="icon"></div><h4 class="my-3">{$a}</h4></div>';
 $string['finaltrailmessage']  = '<div class="d-flex justify-content-center align-items-center
                         flex-column w-100 p-3 zatukconfirmationdialogue_content">
                         <div class="icon"></div><h4 class="my-3">{$a}</h4></div>';
@@ -52,44 +54,38 @@ $string['generatetoken'] = 'Generate token';
 $string['generatetokenconfirm'] = 'Are you sure you want to generate token?';
 $string['get_started']  = 'Get started';
 $string['headercontent'] = 'Do you want upgrade your zatuk plan?';
-$string['inprogress'] = 'In progress';
 $string['inprogressvideos'] = 'In progress videos';
 $string['key_secret_instance']  = 'Below are the key / secret for instance';
-$string['longduration'] = 'Larger vidoes first';
 $string['max_video_size_50mb']  = 'Max video size - 50MB';
 $string['moodle_token'] = 'Moodle token';
 $string['moodle_token_content'] = 'Moodle token content';
 $string['moodle_token_content_help'] = 'Moodle token content help';
 $string['moodleurl'] = 'Moodle url';
-$string['name_content']  = 'Name content';
-$string['name_content_help']  = 'Name content help';
+$string['name_content']  = 'User name';
+$string['name_content_help']  = 'Name of the user for generating the configuration token.';
 $string['newcreatedbydate'] = 'New videos first';
 $string['oldcreatedbydate'] = 'New videos last';
 $string['organization'] = 'Organization';
 $string['organization_code'] = 'Organization code';
-$string['organization_code_content']  = 'Organization code content';
-$string['organization_code_content_help']  = 'Organization code content help';
-$string['organization_content']  = 'Organization content';
-$string['organization_content_help']  = 'Organization content help';
+$string['organization_code_content']  = 'Organization code';
+$string['organization_code_content_help']  = 'Code of the organization for generating the configuration token.';
+$string['organization_content']  = 'organization';
+$string['organization_content_help']  = 'Name of the organization for generating the configuration token.';
 $string['per_month']  = 'Per month';
 $string['phone_no']  = 'Phone No.';
 $string['pluginname'] = 'Zatuk';
-$string['privacy:metadata:repository_zatuk:email'] = 'This is for user email';
-$string['privacy:metadata:repository_zatuk:name'] = 'This is for user name';
-$string['privacy:metadata:repository_zatuk:organisationcode'] = 'This is for organization code';
-$string['privacy:metadata:repository_zatuk:organization'] = 'This is for organization.';
-$string['privacy:metadata:repository_zatuk:zatuk_key'] = 'This is for key';
-$string['privacy:metadata:repository_zatuk:zatuk_secret'] = 'This is for secret';
+$string['privacy:metadata'] = 'The zatuk repository plugin does not store or transmit any personal data.';
 $string['published']  = 'Published';
 $string['publishedvideos'] = 'Published videos';
 $string['registration']  = 'Registration';
 $string['repository/zatuk:view']  = 'View zatuk repository';
 $string['required']  = 'Required';
-$string['requiredemail'] = 'Please enther the email';
+$string['requiredallfields']  = 'Required all fields.';
+$string['requiredemail'] = 'Please enter an email';
 $string['requiredmoodleurl'] = 'Please enter the moodle url';
 $string['requiredname'] = 'Please enter the name';
-$string['requiredorganisation'] = 'Please enter the organisation';
-$string['requiredorganisationcode'] = 'Please enter the organisation code';
+$string['requiredorganization'] = 'Please enter the organization';
+$string['requiredorganizationcode'] = 'Please enter the organization code';
 $string['requiredtoken'] = 'Please enter the token';
 $string['searchedvalue'] = 'searched value is {$a->objectid}.';
 $string['secret'] = 'Secret';
@@ -120,16 +116,15 @@ $string['videothumbnail'] = 'Video thumbnail';
 $string['videotitle'] = 'Video title';
 $string['videotitlerequired'] = 'Video title is required';
 $string['zatuk:view'] = 'Use zatuk in file picker';
-$string['zatuk_api_url']  = 'Url';
-$string['zatuk_api_url_content']  = 'Zatuk api url content';
-$string['zatuk_api_url_content_help']  = 'Zatuk api url content help';
 $string['zatuk_cloud_hosting']  = 'Zatuk cloud hosting';
 $string['zatuk_key']  = 'Zatuk key';
-$string['zatuk_key_content']  = 'Zatuk key content';
 $string['zatuk_key_content_help']  = 'Zatuk key content help';
 $string['zatuk_secret']  = 'Zatuk secret';
 $string['zatuk_secret_content']  = 'Zatuk secret content';
 $string['zatuk_secret_content_help']  = 'Zatuk secret content help';
+$string['zatukapiurl']  = 'Zatuk api url';
+$string['zatukapiurl_content']  = 'Zatuk api url';
+$string['zatukapiurl_content_help']  = 'Zatuk api url';
 $string['zatuksettings']  = 'Submit';
 $string['zatuksettingsupdate']  = 'Update';
 $string['zatukvideos'] = 'Videos getting from zatuk side ... {$a->objectid}.';
