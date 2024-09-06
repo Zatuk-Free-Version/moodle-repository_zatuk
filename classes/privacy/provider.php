@@ -17,65 +17,29 @@
 /**
  * repository_zatuk provider class.
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 namespace repository_zatuk\privacy;
 
-use core_privacy\local\metadata\collection;
-
 /**
- * Privacy Subsystem for repository_zatuk implementing metadata, plugin providers.
+ * Privacy Subsystem for repository_zatuk implementing null_provider.
  *
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements
-        \core_privacy\local\metadata\provider {
+class provider implements \core_privacy\local\metadata\null_provider {
 
     /**
-     * Returns meta data about this system.
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
      *
-     * @param   collection $collection The initialised collection to add items to.
-     * @return  collection     A listing of user data stored through this system.
+     * @return  string
      */
-    public static function get_metadata(collection $collection): collection {
-        $collection->add_user_preference(
-            'organization',
-            'privacy:metadata:repository_zatuk:organization'
-        );
-
-        $collection->add_user_preference(
-            'organisationcode',
-            'privacy:metadata:repository_zatuk:organisationcode'
-        );
-
-        $collection->add_user_preference(
-            'name',
-            'privacy:metadata:repository_zatuk:name'
-        );
-
-        $collection->add_user_preference(
-            'email',
-            'privacy:metadata:repository_zatuk:email'
-        );
-
-        $collection->add_user_preference(
-            'zatuk_key',
-            'privacy:metadata:repository_zatuk:zatuk_key'
-        );
-
-         $collection->add_user_preference(
-            'zatuk_secret',
-            'privacy:metadata:repository_zatuk:zatuk_secret'
-        );
-
-        return $collection;
+    public static function get_reason(): string {
+        return 'privacy:metadata';
     }
-
 }
 
 

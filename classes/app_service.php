@@ -17,15 +17,15 @@
 /**
  * repository_zatuk app_service class.
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace repository_zatuk;
-defined('MOODLE_INTERNAL') || die();
-require_once($CFG->libdir . '/filelib.php');
+
 use curl;
+use Exception;
+
 /**
  * Class app_service
  */
@@ -53,7 +53,7 @@ class app_service {
      */
     protected $endpoints;
     /**
-     * @var \stdClass|array|string $session
+     * @var object $session
      */
     protected $session;
 
@@ -168,7 +168,7 @@ class app_service {
                 'message'   => '',
                 'response'  => $finalapiresponse,
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $response = [
                 'error'     => true,
                 'message'   => $e->getMessage(),
@@ -199,7 +199,7 @@ class app_service {
      * @return array $endpoints
      */
     protected function available_endpoints() {
-        $this->apiurl = get_config('repository_zatuk', 'zatuk_api_url');
+        $this->apiurl = get_config('repository_zatuk', 'zatukapiurl');
         return [
             'generate_token'    => [
                 'url'           => $this->apiurl.'/api/v1/apis/token',

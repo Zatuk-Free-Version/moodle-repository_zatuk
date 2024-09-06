@@ -16,7 +16,6 @@
 /**
  * Defines zatuk configuration script.
  *
- * @since      Moodle 2.0
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -40,12 +39,37 @@ let MessageModal = new messagemodal();
 export const init = () => {
     document.addEventListener('click', function(e) {
         let zatuksettings = e.target.closest(Selectors.actions.zatuksettings);
+
         if (zatuksettings) {
+
+            let organization = $("#id_organization").val();
+            let zatukapiurl = $("#id_zatukapiurl").val();
+            let organizationcode = $("#id_organization_code").val();
+            let name = $("#id_name").val();
+            let email = $("#id_email").val();
             e.preventDefault();
-            $('.section_container').addClass('d-none');
-            $('.section_container.registration_plans').removeClass('d-none');
-            $('.step-1').addClass('completed');
-            $('.step-2').addClass('active');
+            if(organization === '' || organizationcode === '' || zatukapiurl === '' || name === '' ||  email === '' ) {
+                getString('requiredallfields' ,'repository_zatuk').then((str) => {
+                    MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
+                });
+            } else {
+                $.ajax({
+                    method: "GET",
+                    dataType: "json",
+                    url: M.cfg.wwwroot + "/repository/zatuk/ajax.php?organization="+organization+
+                    "&zatukapiurl="+zatukapiurl+
+                    "&organizationcode="+organizationcode+
+                    "&name="+name+
+                    "&email="+email+"",
+                    success: function(){
+                        $('.section_container').addClass('d-none');
+                        $('.section_container.registration_plans').removeClass('d-none');
+                        $('.step-1').addClass('completed');
+                        $('.step-2').addClass('active');
+                    }
+                });
+
+            }
         }
     });
     document.addEventListener('click', function(e) {
@@ -54,18 +78,18 @@ export const init = () => {
             e.preventDefault();
             var params = {};
             var organization = $("#id_organization").val();
-            var zatuk_api_url = $("#id_zatuk_api_url").val();
-            var organisationcode = $("#id_organization_code").val();
+            var zatukapiurl = $("#id_zatukapiurl").val();
+            var organizationcode = $("#id_organization_code").val();
             var name = $("#id_name").val();
             var email = $("#id_email").val();
             var params = {};
             params.organization = organization;
-            params.zatuk_api_url = zatuk_api_url;
-            params.organisationcode = organisationcode;
+            params.zatukapiurl = zatukapiurl;
+            params.organizationcode = organizationcode;
             params.name = name;
             params.email = email;
             var promise = Ajax.call([{
-                methodname: 'repository_zatukplans',
+                methodname: 'repository_configure_zatuk',
                 args: params
             }]);
             promise[0].done(function(resp) {
@@ -86,18 +110,26 @@ export const init = () => {
                         $('.step-2').addClass('completed');
                         $('.step-3').addClass('active');
                     }).fail(function() {
-                        MessageModal.confirmbox(getString('exception'));
+                        getString('exception', 'repository_zatuk').then((str) => {
+                           MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
+                        });
                     });
 
                 } else {
                     if(resp.errormessage === null && resp.success === null) {
-                        MessageModal.confirmbox(getString('serverdown', 'repository_zatuk'));
+                        getString('serverdown' ,'repository_zatuk').then((str) => {
+                          MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
+                        });
                     } else {
-                        MessageModal.confirmbox(resp.errormessage);
+                        getString(resp.errormessage).then((str) => {
+                          MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
+                        });
                     }
                 }
             }).fail(function() {
-                MessageModal.confirmbox(getString('errormessage', 'repository_zatuk'));
+                getString('errormessage', 'repository_zatuk').then((str) => {
+                  MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
+                });
             });
         }
     });
@@ -105,7 +137,8 @@ export const init = () => {
         let zatukdetails = e.target.closest(Selectors.actions.zatukdetails);
         if (zatukdetails) {
             e.preventDefault();
-            location.reload();
+            $(window).off('beforeunload');
+            window.location.reload();
         }
     });
     document.addEventListener('click', function(e) {
@@ -116,23 +149,32 @@ export const init = () => {
             var organization = $("#id_organization").val();
             var name = $("#id_name").val();
             var email = $("#id_email").val();
-            var params = {};
-            params.organization = organization;
-            params.name = name;
-            params.email = email;
-            var promise = Ajax.call([{
-                methodname: 'repository_updatezatuksettings',
-                args: params
-            }]);
-            promise[0].done(function(resp) {
-                if(resp) {
-                    getString('updatemessage' ,'repository_zatuk').then((str) => {
-                        MessageModal.confirmbox(getString('finaltrailmessage','repository_zatuk',str));
+            if(organization === '' || name === '' ||  email === '' ) {
+                getString('requiredallfields' ,'repository_zatuk').then((str) => {
+                    MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
+                });
+            } else {
+                var params = {};
+                params.organization = organization;
+                params.name = name;
+                params.email = email;
+                var promise = Ajax.call([{
+                    methodname: 'repository_update_zatuk_settings',
+                    args: params
+                }]);
+                promise[0].done(function(resp) {
+                    if(resp) {
+                        getString('updatemessage' ,'repository_zatuk').then((str) => {
+                            MessageModal.confirmbox(getString('finaltrailmessage','repository_zatuk',str));
+                        });
+                    }
+                }).fail(function() {
+                   getString('exception', 'repository_zatuk').then((str) => {
+                        MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                     });
-                }
-            }).fail(function() {
-                MessageModal.confirmbox('exception');
-            });
+                });
+            }
+
         }
     });
 };

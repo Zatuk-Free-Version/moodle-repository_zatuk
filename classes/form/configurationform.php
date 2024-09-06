@@ -17,19 +17,21 @@
 /**
  * repository_zatuk configurationform form
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace repository_zatuk\form;
 
-defined('MOODLE_INTERNAL') || die;
-require_once($CFG->dirroot.'/lib/formslib.php');
+use moodleform;
+
+defined('MOODLE_INTERNAL') || die();
+global $CFG;
+require_once($CFG->libdir . '/formslib.php');
 /**
  * configurationform
  */
-class configurationform extends \moodleform {
+class configurationform extends moodleform {
 
     /**
      * Define this form - called by the parent constructor
@@ -41,8 +43,8 @@ class configurationform extends \moodleform {
         $name = get_config('repository_zatuk', 'name');
         $email = get_config('repository_zatuk', 'email');
         $organization = get_config('repository_zatuk', 'organization');
-        $organizationcode = get_config('repository_zatuk', 'organization_code');
-        $zatukapiurl = get_config('repository_zatuk', 'zatuk_api_url');
+        $organizationcode = get_config('repository_zatuk', 'organizationcode');
+        $zatukapiurl = get_config('repository_zatuk', 'zatukapiurl');
         $zatukkey = get_config('repository_zatuk', 'zatuk_key');
         $zatuksecret = get_config('repository_zatuk', 'zatuk_secret');
 
@@ -96,10 +98,10 @@ class configurationform extends \moodleform {
             $mform->addHelpButton('organization_code', 'organization_code_content', 'repository_zatuk');
             $mform->addRule('organization_code', get_string('required', 'repository_zatuk'), 'required', null, 'client');
 
-            $mform->addElement('text', 'zatuk_api_url', get_string('zatuk_api_url', 'repository_zatuk'), ['value' => $zatukapiurl]);
-            $mform->setType('zatuk_api_url', PARAM_RAW_TRIMMED);
-            $mform->addHelpButton('zatuk_api_url', 'zatuk_api_url_content', 'repository_zatuk');
-            $mform->addRule('zatuk_api_url', get_string('required', 'repository_zatuk'), 'required', null, 'client');
+            $mform->addElement('text', 'zatukapiurl', get_string('zatukapiurl', 'repository_zatuk'), ['value' => $zatukapiurl]);
+            $mform->setType('zatukapiurl', PARAM_RAW_TRIMMED);
+            $mform->addHelpButton('zatukapiurl', 'zatukapiurl_content', 'repository_zatuk');
+            $mform->addRule('zatukapiurl', get_string('required', 'repository_zatuk'), 'required', null, 'client');
             $mform->addElement('submit', 'submit', get_string('zatuksettings', 'repository_zatuk'),
             ['data-action' => 'zatuksettings']);
         } else {
@@ -109,12 +111,12 @@ class configurationform extends \moodleform {
             $mform->addHelpButton('organization_code', 'organization_code_content', 'repository_zatuk');
             $mform->addRule('organization_code', get_string('required', 'repository_zatuk'), 'required', null, 'client');
 
-            $apiurlstring = get_string('zatuk_api_url', 'repository_zatuk');
+            $apiurlstring = get_string('zatukapiurl', 'repository_zatuk');
 
-            $mform->addElement('text', 'zatuk_api_url', $apiurlstring , ['value' => $zatukapiurl , "disabled" => "disabled"]);
-            $mform->setType('zatuk_api_url', PARAM_RAW_TRIMMED);
-            $mform->addHelpButton('zatuk_api_url', 'zatuk_api_url_content', 'repository_zatuk');
-            $mform->addRule('zatuk_api_url', get_string('required', 'repository_zatuk'), 'required', null, 'client');
+            $mform->addElement('text', 'zatukapiurl', $apiurlstring , ['value' => $zatukapiurl , "disabled" => "disabled"]);
+            $mform->setType('zatukapiurl', PARAM_RAW_TRIMMED);
+            $mform->addHelpButton('zatukapiurl', 'zatukapiurl_content', 'repository_zatuk');
+            $mform->addRule('zatukapiurl', get_string('required', 'repository_zatuk'), 'required', null, 'client');
             $mform->addElement('submit', 'submit', get_string('zatuksettingsupdate', 'repository_zatuk'),
             ['data-action' => 'updatesettings']);
         }

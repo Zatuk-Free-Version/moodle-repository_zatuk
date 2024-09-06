@@ -17,7 +17,6 @@
 /**
  * repository_zatuk zatuksettings class.
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -54,12 +53,12 @@ class zatuksettings implements renderable, templatable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
-        global $CFG, $USER;
         $data = new stdClass;
         $configurationform = new configurationform();
         $data->register_form = $configurationform->render();
         $data->zatukkey = get_config('repository_zatuk', 'zatuk_key');
         $data->zatuksecret = get_config('repository_zatuk', 'zatuk_secret');
+        $data->zatukapiurl = get_config('repository_zatuk', 'zatukapiurl');
         return $data;
     }
 

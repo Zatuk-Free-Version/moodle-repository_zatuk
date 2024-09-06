@@ -16,24 +16,24 @@
 /**
  * Defines zatuk configuration script.
  *
- * @since      Moodle 2.0
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 import {get_string as getString} from 'core/str';
-import ModalFactory from 'core/modal_factory';
-
+import ModalCancel from "core/modal_cancel";
 export default class MessageModal {
     confirmbox(message) {
-        ModalFactory.create({
-            body: message,
-            type: ModalFactory.types.ALERT,
-            buttons: {
-                cancel: getString('ok'),
-            },
-            removeOnClose: true,
-        }).done(function(modal) {
+        const messageModal = async () => {
+            const modal = await ModalCancel.create({
+                body: message,
+                show: true,
+                removeOnClose: true,
+                buttons: {
+                    cancel: getString('ok'),
+                },
+            });
             modal.show();
-        });
+        };
+        messageModal();
     }
 }

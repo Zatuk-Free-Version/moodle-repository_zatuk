@@ -17,17 +17,15 @@
 /**
  * repository_zatuk video_service class.
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace repository_zatuk;
-defined('MOODLE_INTERNAL') || die();
+
 use stdClass;
 use context_system;
 use repository_zatuk\app_service;
-require_once("$CFG->libdir/externallib.php");
 define ('VISIBLE', 1);
 /**
  * Class video_service
@@ -54,11 +52,11 @@ class video_service {
      */
     public $userid;
     /**
-     * @var  array $statuses;
+     * @var  array $statusoptions;
      */
-    public $statuses;
+    public $statusoptions;
     /**
-     * @var stdClass|array|string $service;
+     * @var object $service;
      */
     public $service;
 
@@ -76,7 +74,7 @@ class video_service {
         $this->table = 'repository_zatuk_videos';
         $this->reference = $reference;
         $this->userid = $userid;
-        $this->statuses = ['Uploaded', 'Published'];
+        $this->statusoptions = ['Uploaded', 'Published'];
     }
 
     /**
@@ -130,7 +128,7 @@ class video_service {
                 'title'         => $result->title,
                 'description'   => unserialize($result->description),
                 'tags'          => $result->tags,
-                'status'        => $this->statuses[$result->status],
+                'status'        => $this->statusoptions[$result->status],
                 'username'      => $result->username,
                 'usercreated'   => $result->usercreated,
                 'thumbnail'     => $result->thumbnail,
@@ -275,7 +273,6 @@ class video_service {
     public function enablezatuk() {
         $repositoryenabled = $this->isrepositoryenabled();
         if (!$repositoryenabled) {
-            purge_caches();
             $row = [];
             $data = [];
             $row['type'] = 'zatuk';
@@ -305,15 +302,16 @@ class video_service {
         return $result;
     }
     /**
-     * Getting zatuk plan record.
+     * Configure zatuk repository.
      * @param stdClass $sdata
      * @return stdclass
      */
-    public function zatukingplan($sdata) {
-        global $USER;
+    public function configure_zatuk_repository($sdata) {
+        global $USER, $CFG;
+        require_once($CFG->libdir.'/externallib.php');
         $systemcontext = context_system::instance();
         $organization = $sdata->organization;
-        $organisationcode = $sdata->organisationcode;
+        $organizationcode = $sdata->organizationcode;
         $email = $sdata->email;
         $name = $sdata->name;
         $service = $this->db->get_record('external_services', ['shortname' => 'zatuk_web_service', 'enabled' => VISIBLE]);
@@ -334,7 +332,7 @@ class video_service {
         }
         $service = new app_service();
 
-        $apiresponse = $service->upgrade_package($name, $email, $token, $organization, $organisationcode);
+        $apiresponse = $service->upgrade_package($name, $email, $token, $organization, $organizationcode);
         $response = $apiresponse['response'];
         if (!$response->success) {
             if ($response->errors && is_object($response->errors)) {
@@ -352,8 +350,8 @@ class video_service {
             if ($organization) {
                 set_config('organization', $organization, 'repository_zatuk');
             }
-            if ($organisationcode) {
-                set_config('organisationcode', $organisationcode, 'repository_zatuk');
+            if ($organizationcode) {
+                set_config('organizationcode', $organizationcode, 'repository_zatuk');
             }
             if ($email) {
                 set_config('email', $email, 'repository_zatuk');
@@ -369,15 +367,16 @@ class video_service {
             if ($response->api_info && !empty($response->api_info->secret)) {
                 set_config('zatuk_secret', $response->api_info->secret, 'repository_zatuk');
             }
+            purge_caches();
         }
         return $response;
     }
     /**
-     * Describes the zatuk settings updation.
+     * Describes the zatuk configuration settings updation.
      * @param object $sdata
      * @return bool
      */
-    public function updatezatuksetting($sdata) {
+    public function update_zatuk_configuration_setting($sdata) {
         set_config('name', $sdata->name, 'repository_zatuk');
         set_config('organization', $sdata->organization, 'repository_zatuk');
         set_config('email', $sdata->email, 'repository_zatuk');

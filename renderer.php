@@ -17,14 +17,12 @@
 /**
  * zatuk repository renderer.
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 use repository_zatuk\output\zatuksettings;
-use repository_zatuk\output\zatukconfiguration;
 
 /**
  *  Zatuk repository renderer class.

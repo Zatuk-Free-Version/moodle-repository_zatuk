@@ -17,7 +17,6 @@
 /**
  * Zatuk repository data generator.
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -47,8 +46,8 @@ class repository_zatuk_generator extends testing_repository_generator {
         if (!isset($record['zatuk_secret'])) {
             $record['zatuk_secret'] = 'zatuk_secret';
         }
-        if (!isset($record['zatuk_api_url'])) {
-            $record['zatuk_api_url'] = 'zatuk_api_url';
+        if (!isset($record['zatukapiurl'])) {
+            $record['zatukapiurl'] = 'zatukapiurl';
         }
         return $record;
     }

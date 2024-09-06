@@ -119,6 +119,16 @@
     margin: 15px auto;
 }
 
+.zatukconfirmationfaileddialogue_content .icon {
+    background-image: url('[[pix:repository_zatuk|zatuk_failed]]');
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 100px;
+    margin: 15px auto;
+}
+
 #page-admin-repository-zatuk .modal-dialog .modal-body {
     padding: 0px;
 }

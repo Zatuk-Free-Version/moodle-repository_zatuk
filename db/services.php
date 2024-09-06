@@ -17,7 +17,6 @@
 /**
  * repository_zatuk external functions and service definitions.
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,9 +26,8 @@ require_once($CFG->dirroot.'/repository/zatuk/lib.php');
 $functions = [
 
     'repository_zatuk_validate_instance' => [
-        'classname'     => 'repository_zatuk_external',
-        'methodname'    => 'validate_instance',
-        'classpath'     => 'repository/zatuk/classes/external.php',
+        'classname'     => 'repository_zatuk\external\zatuk_validate_instance',
+        'methodname'    => 'execute',
         'description'   => 'Validates the provided moodle instance',
         'type'          => 'read',
         'capabilities'  => 'repository/zatuk:view',
@@ -38,9 +36,8 @@ $functions = [
         'loginrequired' => true,
     ],
     'repository_zatuk_get_video_url'   => [
-        'classname'     => 'repository_zatuk_external',
-        'methodname'    => 'get_video_url',
-        'classpath'     => 'repository/zatuk/classes/external.php',
+        'classname'     => 'repository_zatuk\external\zatuk_get_video_url',
+        'methodname'    => 'execute',
         'description'   => 'Gets dynamic video player url from zatuk',
         'type'          => 'read',
         'capabilities'  => 'repository/zatuk:view',
@@ -49,9 +46,8 @@ $functions = [
         'loginrequired' => true,
     ],
     'repository_zatuk_get_videos'   => [
-        'classname'     => 'repository_zatuk_external',
-        'methodname'    => 'get_videos',
-        'classpath'     => 'repository/zatuk/classes/external.php',
+        'classname'     => 'repository_zatuk\external\zatuk_get_videos',
+        'methodname'    => 'execute',
         'description'   => 'gets list of available videos',
         'type'          => 'read',
         'capabilities'  => 'repository/zatuk:view',
@@ -59,10 +55,9 @@ $functions = [
         'ajax'          => true,
         'loginrequired' => true,
     ],
-    'repository_zatukplans'   => [
-        'classname'     => 'repository_zatuk_external',
-        'methodname'    => 'zatukplans',
-        'classpath'     => 'repository/zatuk/classes/external.php',
+    'repository_configure_zatuk'   => [
+        'classname'     => 'repository_zatuk\external\configure_zatuk',
+        'methodname'    => 'execute',
         'description'   => 'gets list of available videos',
         'type'          => 'read',
         'services'      => [MOODLE_ZATUK_WEB_SERVICE],
@@ -70,9 +65,8 @@ $functions = [
         'loginrequired' => true,
     ],
     'repository_enable_zatuk'   => [
-        'classname'     => 'repository_zatuk_external',
-        'methodname'    => 'enable_zatuk',
-        'classpath'     => 'repository/zatuk/classes/external.php',
+        'classname'     => 'repository_zatuk\external\enable_zatuk',
+        'methodname'    => 'execute',
         'description'   => 'enables the zatuk plugin',
         'type'          => 'read',
         'capabilities'  => 'repository/zatuk:view',
@@ -80,10 +74,9 @@ $functions = [
         'ajax'          => true,
         'loginrequired' => true,
     ],
-    'repository_updatezatuksettings'   => [
-        'classname'     => 'repository_zatuk_external',
-        'methodname'    => 'updatezatuksettings',
-        'classpath'     => 'repository/zatuk/classes/external.php',
+    'repository_update_zatuk_settings'   => [
+        'classname'     => 'repository_zatuk\external\update_zatuk_settings',
+        'methodname'    => 'execute',
         'description'   => 'updates the zatuk settings',
         'type'          => 'read',
         'capabilities'  => 'repository/zatuk:view',

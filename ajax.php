@@ -17,32 +17,35 @@
 /**
  * This file uset to fetch information from repository_zatuk config and display the data.
  *
- * @since      Moodle 2.0
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define('AJAX_SCRIPT', true);
 require_once('../../config.php');
-require_once($CFG->libdir . '/adminlib.php');
-require_once($CFG->libdir.'/externallib.php');
-use repository_zatuk\video_service;
-global $CFG, $DB, $USER, $PAGE, $OUTPUT, $SESSION;
 require_login();
 require_capability('repository/zatuk:view', context_system::instance());
 $organization = required_param('organization', PARAM_RAW);
-$zatukapiurl = required_param('zatuk_api_url', PARAM_RAW);
-$organisationcode = required_param('organization', PARAM_RAW);
+$zatukapiurl = required_param('zatukapiurl', PARAM_RAW);
+$organizationcode = required_param('organizationcode', PARAM_RAW);
 $email = required_param('email', PARAM_RAW);
 $name = required_param('name', PARAM_RAW);
-$sdata = new stdClass();
-$sdata->email = $email;
-$sdata->name = $name;
-$sdata->organisationcode = $organisationcode;
-$sdata->zatuk_api_url = $zatukapiurl;
-$sdata->organization = $organization;
-set_config('zatuk_api_url', $zatukapiurl, 'repository_zatuk');
-$zatukplans = new video_service();
-$response = $zatukplans->zatukingplan($sdata);
-echo $response->success;
+$response = false;
+if ($zatukapiurl) {
+    $response = set_config('zatukapiurl', $zatukapiurl, 'repository_zatuk');
+}
+if ($organization) {
+    $response = set_config('organization', $organization, 'repository_zatuk');
+}
+if ($organizationcode) {
+    $response = set_config('organizationcode', $organizationcode, 'repository_zatuk');
+}
+if ($email) {
+    $response = set_config('email', $email, 'repository_zatuk');
+}
+if ($name) {
+    $response = set_config('name', $name, 'repository_zatuk');
+}
+
+echo json_encode($response, true);
 
