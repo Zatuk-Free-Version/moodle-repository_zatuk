@@ -54,7 +54,7 @@ class get_videos extends \core\event\base {
     }
     /**
      * get_url method
-     * @return \moodle_url
+     * @return moodle_url
      */
     public function get_url() {
         return new moodle_url('/course/modedit.php?add=zatuk',

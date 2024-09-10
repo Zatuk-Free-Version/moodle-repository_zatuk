@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * repository_zatuk app_service class.
+ * repository_zatuk app service class.
  *
  * @package    repository_zatuk
  * @copyright  2023 Moodle India

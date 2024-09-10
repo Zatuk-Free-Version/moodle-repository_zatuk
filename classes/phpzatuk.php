@@ -26,7 +26,6 @@ namespace repository_zatuk;
 use curl;
 use moodle_exception;
 use Exception;
-define ('VISIBLE', 1);
 /**
  * Class phpzatuk
  */
