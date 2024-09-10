@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * repository_zatuk video_service class.
+ * repository_zatuk video service class.
  *
  * @package    repository_zatuk
  * @copyright  2023 Moodle India
@@ -26,7 +26,7 @@ namespace repository_zatuk;
 use stdClass;
 use context_system;
 use repository_zatuk\app_service;
-define ('VISIBLE', 1);
+use repository_zatuk\zatuk_constants as zc;
 /**
  * Class video_service
  */
@@ -65,7 +65,7 @@ class video_service {
      * @param string $reference
      * @param int $userid
      */
-    public function __construct($reference = '', $userid = 0) {
+    public function __construct($reference = '', $userid = zc::DEFAULTSTATUS) {
         global $DB;
         $this->db = $DB;
 
@@ -150,7 +150,7 @@ class video_service {
         $data->videothumbnail = $video->thumbnail;
         $data->description = serialize($video->description);
         $data->tags = $video->tags;
-        $data->status = 0;
+        $data->status = zc::DEFAULTSTATUS;
         $data->reference = $this->reference;
         $data->reference_id = $this->get_reference_id($video);
         $data->organization = $video->organization;
@@ -180,7 +180,7 @@ class video_service {
                     ['component' => 'repository_zatuk',
                         'filearea' => 'repository_video',
                         'filename' => '.',
-                        'status' => 0]
+                        'status' => zc::DEFAULTSTATUS]
                     );
 
         foreach ($videos as $video) {
@@ -253,7 +253,7 @@ class video_service {
      * @return integer $referenceid
      */
     public function get_reference_id($data) {
-        $referenceid = 0;
+        $referenceid = zc::DEFAULTSTATUS;
         switch($this->reference){
             case 'uploads':
                 $referenceid = $data->videofile;
@@ -276,7 +276,7 @@ class video_service {
             $row = [];
             $data = [];
             $row['type'] = 'zatuk';
-            $row['visible'] = VISIBLE;
+            $row['visible'] = zc::STATUSA;
             $sortorder = $this->db->get_record_sql("SELECT sortorder FROM {repository} ORDER BY ID DESC LIMIT 1");
             $row['sortorder'] = $sortorder->sortorder + 1;
             $record = $this->db->insert_record('repository', $row);
@@ -298,7 +298,7 @@ class video_service {
      */
     public function isrepositoryenabled() {
 
-        $result = $this->db->record_exists('repository', ['type' => 'zatuk', 'visible' => VISIBLE]);
+        $result = $this->db->record_exists('repository', ['type' => 'zatuk', 'visible' => zc::STATUSA]);
         return $result;
     }
     /**
@@ -314,7 +314,7 @@ class video_service {
         $organizationcode = $sdata->organizationcode;
         $email = $sdata->email;
         $name = $sdata->name;
-        $service = $this->db->get_record('external_services', ['shortname' => 'zatuk_web_service', 'enabled' => VISIBLE]);
+        $service = $this->db->get_record('external_services', ['shortname' => 'zatuk_web_service', 'enabled' => zc::STATUSA]);
         if ($service) {
             $conditions = [
             'userid' => $USER->id,
@@ -325,7 +325,7 @@ class video_service {
             if ($existingtokens) {
                 $token = $existingtokens->token;
             } else {
-                $token = external_generate_token(EXTERNAL_TOKEN_PERMANENT, $service->id, $USER->id, $systemcontext->id, 0);
+                $token = external_generate_token(EXTERNAL_TOKEN_PERMANENT, $service->id, $USER->id, $systemcontext->id, zc::DEFAULTSTATUS);
             }
         } else {
             $token = '';

@@ -118,14 +118,11 @@ $string['videotitlerequired'] = 'Video title is required';
 $string['zatuk:view'] = 'Use zatuk in file picker';
 $string['zatuk_cloud_hosting']  = 'Zatuk cloud hosting';
 $string['zatuk_key']  = 'Zatuk key';
-$string['zatuk_key_content_help']  = 'Zatuk key content help';
 $string['zatuk_secret']  = 'Zatuk secret';
-$string['zatuk_secret_content']  = 'Zatuk secret content';
-$string['zatuk_secret_content_help']  = 'Zatuk secret content help';
 $string['zatukapiurl']  = 'Zatuk api url';
 $string['zatukapiurl_content']  = 'Zatuk api url';
 $string['zatukapiurl_content_help']  = 'Zatuk api url';
 $string['zatuksettings']  = 'Submit';
 $string['zatuksettingsupdate']  = 'Update';
-$string['zatukvideos'] = 'Videos getting from zatuk side ... {$a->objectid}.';
+$string['zatukvideos'] = 'Videos getting from zatuk server ... {$a->objectid}.';
 
