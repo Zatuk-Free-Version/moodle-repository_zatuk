@@ -6,7 +6,15 @@
 
     Welcome to the README for the zatuk plugin in Moodle! This document provides information about the zatuk plugin, how to install and use it, and customization options.
 
-# Description:
+  # Description:
+
+    This plugin revolutionizes the integration between the Zatuk application and Learning Management Systems (LMS), offering seamless connectivity and enhanced functionality for educational institutions and organizations. By installing this plugin and configuring the necessary details, users can effortlessly establish a robust connection between Zatuk and their preferred LMS platform.
+
+    Upon installation, the plugin initiates a streamlined process: it automatically generates a dedicated organization within the Zatuk application tailored to the specific needs of the user. This organizational setup is pivotal, as it serves as the foundational structure through which Zatuk interacts with the LMS, ensuring clarity and efficiency in data exchange and operational workflows.
+
+    Key to the functionality of the plugin is its provision of secure access credentials. Through a secure and automated mechanism, the plugin generates unique secret keys and authentication tokens. These credentials not only authenticate the connection between Zatuk and the LMS but also safeguard the integrity of data transmission.
+
+# Short Description:
 
    This plugin transforms the integration between the Zatuk application and LMS platforms, enabling seamless connectivity and enhanced functionality. Upon installation, it automatically creates a dedicated organization in Zatuk tailored to the user’s needs and provides secure, automated access credentials to ensure a smooth and secure connection.
 
