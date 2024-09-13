@@ -6,7 +6,7 @@
 
     Welcome to the README for the zatuk plugin in Moodle! This document provides information about the zatuk plugin, how to install and use it, and customization options.
 
-  # Description:
+# Description:
 
     This plugin revolutionizes the integration between the Zatuk application and Learning Management Systems (LMS), offering seamless connectivity and enhanced functionality for educational institutions and organizations. By installing this plugin and configuring the necessary details, users can effortlessly establish a robust connection between Zatuk and their preferred LMS platform.
 

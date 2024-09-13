@@ -208,8 +208,8 @@ class video_service {
      * @return array $video
      */
     public function get_video($videoid) {
-        $video = $this->service->get_video($videoid);
-        return $video;
+        $response = $this->service->get_video($videoid);
+        return $response;
     }
 
     /**
@@ -309,6 +309,7 @@ class video_service {
     public function configure_zatuk_repository($sdata) {
         global $USER, $CFG;
         require_once($CFG->libdir.'/externallib.php');
+        require_once($CFG->libdir.'/moodlelib.php');
         $systemcontext = context_system::instance();
         $organization = $sdata->organization;
         $organizationcode = $sdata->organizationcode;
@@ -325,7 +326,11 @@ class video_service {
             if ($existingtokens) {
                 $token = $existingtokens->token;
             } else {
-                $token = external_generate_token(EXTERNAL_TOKEN_PERMANENT, $service->id, $USER->id, $systemcontext->id, zc::DEFAULTSTATUS);
+                $token = external_generate_token(EXTERNAL_TOKEN_PERMANENT,
+                                               $service->id,
+                                               $USER->id,
+                                               $systemcontext->id,
+                                               zc::DEFAULTSTATUS);
             }
         } else {
             $token = '';
@@ -380,6 +385,17 @@ class video_service {
         set_config('name', $sdata->name, 'repository_zatuk');
         set_config('organization', $sdata->organization, 'repository_zatuk');
         set_config('email', $sdata->email, 'repository_zatuk');
+        return true;
+    }
+
+     /**
+      * Removeing key and secret if  there is an exception while enabling the zatuk.
+      * @return bool
+      */
+    public function remove_zatuk_settings() {
+        $this->db->delete_records('config_plugins', ['plugin' => 'repository_zatuk', 'name' => 'zatuk_key']);
+        $this->db->delete_records('config_plugins', ['plugin' => 'repository_zatuk', 'name' => 'zatuk_secret']);
+        purge_caches();
         return true;
     }
 }

@@ -23,13 +23,14 @@
  */
 define('AJAX_SCRIPT', true);
 require_once('../../config.php');
+use repository_zatuk\zatuk_constants as zc;
 require_login();
 require_capability('repository/zatuk:view', context_system::instance());
 $organization = required_param('organization', PARAM_RAW);
-$zatukapiurl = required_param('zatukapiurl', PARAM_RAW);
 $organizationcode = required_param('organizationcode', PARAM_RAW);
 $email = required_param('email', PARAM_RAW);
 $name = required_param('name', PARAM_RAW);
+$zatukapiurl = zc::ZATUK_API_URL;
 $response = false;
 if ($zatukapiurl) {
     $response = set_config('zatukapiurl', $zatukapiurl, 'repository_zatuk');

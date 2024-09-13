@@ -25,51 +25,12 @@
 defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir.'/externallib.php');
 use repository_zatuk\video_service;
+use repository_zatuk\zatuk_constants as zc;
 /**
  * repository_zatuk_external
  */
 class repository_zatuk_external extends external_api {
 
-    /**
-     * Describes the parameters for zatuk_validate_instance .
-     */
-    public static function zatuk_validate_instance_parameters() {
-        return new external_function_parameters(
-            [
-                'value' => new external_value(PARAM_RAW, 'Test Parameter'),
-            ]
-        );
-    }
-
-    /**
-     * this check the existance of moodle instance.
-     * @param array $value
-     * @return array
-     */
-    public static function zatuk_validate_instance($value = '') {
-        $params = self::validate_parameters(
-            self::zatuk_validate_instance_parameters(),
-            [
-                'value' => $value,
-            ]
-        );
-        self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
-        return [
-            'success'   => true,
-        ];
-    }
-    /**
-     * Describes the zatuk_validate_instance return value.
-     * @return  external_single_structure
-     */
-    public static function zatuk_validate_instance_returns() {
-        return new external_single_structure(
-            [
-                'success'  => new external_value(PARAM_RAW, 'success', VALUE_OPTIONAL),
-            ]
-        );
-    }
     /**
      * Describes the parameters for zatuk_get_videos .
      * @return  external_function_parameters
@@ -79,8 +40,8 @@ class repository_zatuk_external extends external_api {
             [
                 'sorting'   => new external_single_structure(
                     [
-                        'key'   => new external_value(PARAM_RAW, 'key', VALUE_OPTIONAL),
-                        'order' => new external_value(PARAM_RAW, 'order', VALUE_OPTIONAL),
+                        'key'   => new external_value(PARAM_RAW, 'key'),
+                        'order' => new external_value(PARAM_RAW, 'order'),
                     ]
                 ),
                 'search'    => new external_value(PARAM_RAW, 'search'),
@@ -91,8 +52,8 @@ class repository_zatuk_external extends external_api {
     /**
      * Returns a list of videos in a provided list of filters.
      * @param array $sorting
-     * @param array $search
-     * @param array $status
+     * @param string $search
+     * @param string $status
      * @return  array
      */
     public static function zatuk_get_videos($sorting, $search, $status) {
@@ -105,7 +66,6 @@ class repository_zatuk_external extends external_api {
             ]
         );
         self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
         $filters = new StdClass;
         $filters->search = $search;
         $filters->sort = $sorting;
@@ -164,7 +124,6 @@ class repository_zatuk_external extends external_api {
             ]
         );
         self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
         $videoservice = new video_service();
         $video = $videoservice->get_video($videoid);
         return [
@@ -204,35 +163,34 @@ class repository_zatuk_external extends external_api {
     public static function enable_zatuk_parameters() {
         return new external_function_parameters(
             [
-                'value' => new external_value(PARAM_RAW, 'Test Parameter'),
+                'haskeygenerated' => new external_value(PARAM_INT, 'haskeygenerated'),
             ]
         );
     }
 
     /**
      * Returns enable response.
-     * @param array $value
+     * @param int $haskeygenerated
      * @return array
      */
-    public static function enable_zatuk($value = '') {
+    public static function enable_zatuk($haskeygenerated) {
         $params = self::validate_parameters(
             self::enable_zatuk_parameters(),
             [
-                'value' => $value,
+                'haskeygenerated' => $haskeygenerated,
             ]
         );
         self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
         $videoservice = new video_service();
-        $response = $videoservice->enablezatuk();
-        if ($response) {
-            $result = true;
+        $result = zc::DEFAULTSTATUS;
+        if ($haskeygenerated) {
+            $response = $videoservice->enablezatuk();
+            $result = ($response) ? zc::STATUSA : zc::DEFAULTSTATUS;
         } else {
-            $result = false;
+            $videoservice->remove_zatuk_settings();
+            $result = zc::DEFAULTSTATUS;
         }
-        return [
-            'success'   => $result,
-        ];
+        return ['success' => $result];
     }
     /**
      * Describes the enable_zatuk return value.
@@ -252,59 +210,56 @@ class repository_zatuk_external extends external_api {
     public static function configure_zatuk_parameters() {
         return new external_function_parameters(
             [
-                'organization' => new external_value(PARAM_RAW, 'organization'),
-                'zatukapiurl' => new external_value(PARAM_RAW, 'zatukapiurl'),
-                'organizationcode' => new external_value(PARAM_RAW, 'organizationcode'),
-                'email' => new external_value(PARAM_RAW, 'email'),
-                'name' => new external_value(PARAM_RAW, 'name'),
+               'organization' => new external_value(PARAM_TEXT, 'organization', VALUE_REQUIRED),
+                'organizationcode' => new external_value(PARAM_TEXT, 'organizationcode', VALUE_REQUIRED),
+                'email' => new external_value(PARAM_EMAIL, 'email', VALUE_REQUIRED),
+                'name' => new external_value(PARAM_TEXT, 'name', VALUE_REQUIRED),
             ]
         );
     }
 
     /**
      * Generates the token with the give passed parameters .
-     * @param string||null $organization
-     * @param string||null $zatukapiurl
-     * @param string||null $organizationcode
-     * @param string||null $email
-     * @param string||null $name
+     * @param string $organization
+     * @param string $organizationcode
+     * @param string $email
+     * @param string $name
      * @return array
      */
-    public static function configure_zatuk($organization='', $zatukapiurl='', $organizationcode='', $email='', $name='') {
+    public static function configure_zatuk( $organization,
+        $organizationcode,
+        $email,
+        $name) {
 
         $params = self::validate_parameters(
             self::configure_zatuk_parameters(),
             [
                 'organization' => $organization,
-                'zatukapiurl' => $zatukapiurl,
                 'organizationcode' => $organizationcode,
                 'email' => $email,
                 'name' => $name,
             ]
         );
         self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
-        $data = [];
-        $sdata = new stdClass();
+         $sdata = new stdClass();
         $sdata->email = $email;
         $sdata->name = $name;
         $sdata->organizationcode = $organizationcode;
-        $sdata->zatukapiurl = $zatukapiurl;
         $sdata->organization = $organization;
+        $zatukapiurl = zc::ZATUK_API_URL;
         set_config('zatukapiurl', $zatukapiurl, 'repository_zatuk');
         $videoservice = new video_service();
         $response = $videoservice->configure_zatuk_repository($sdata);
-        $arr = json_decode(json_encode ($response->errors ) , true);
-        foreach ($arr as $key => $value) {
-            $errors[$key] = json_decode(json_encode ($value[0]) , true);
-            $errormessage = $errors['token'] . $errors['url'] . $errors['email'];
-            $errormessage .= $errors['shortname'] .$errors['organization_name'] . $errors['name'];
+        $success = zc::DEFAULTSTATUS;
+        $message = '';
+        if ($response->success) {
+            $success = zc::STATUSA;
+            $message = $response->message;
+        } else {
+            $success = zc::DEFAULTSTATUS;
+            $message = $response->message;
         }
-        $data['success'] = $response->success;
-        $data['error'] = $response->error;
-        $data['message'] = $response->message;
-        $data['errormessage'] = $errormessage;
-        return $data;
+        return ['success' => $success, 'message' => $message];
     }
     /**
      * Describes the zatukplan return value.
@@ -314,9 +269,7 @@ class repository_zatuk_external extends external_api {
          return new external_single_structure(
             [
             'success' => new external_value(PARAM_RAW, 'success'),
-            'error' => new external_value(PARAM_RAW, 'error'),
             'message' => new external_value(PARAM_RAW, 'message'),
-            'errormessage' => new external_value(PARAM_RAW, 'errors'),
             ]
         );
     }
@@ -328,21 +281,21 @@ class repository_zatuk_external extends external_api {
     public static function update_zatuk_settings_parameters() {
         return new external_function_parameters(
             [
-                'organization' => new external_value(PARAM_RAW, 'organization'),
-                'email' => new external_value(PARAM_RAW, 'email'),
-                'name' => new external_value(PARAM_RAW, 'name'),
+                'organization' => new external_value(PARAM_TEXT, 'organization', VALUE_REQUIRED),
+                'email' => new external_value(PARAM_EMAIL, 'email', VALUE_REQUIRED),
+                'name' => new external_value(PARAM_TEXT, 'name', VALUE_REQUIRED),
             ]
         );
     }
 
     /**
      * Returns the updated response.
-     * @param array $organization
-     * @param array $email
-     * @param array $name
+     * @param string $organization
+     * @param string $email
+     * @param string $name
      * @return bool
      */
-    public static function update_zatuk_settings($organization='', $email='', $name='') {
+    public static function update_zatuk_settings($organization, $email, $name) {
 
          $params = self::validate_parameters(
             self::update_zatuk_settings_parameters(),
@@ -353,7 +306,6 @@ class repository_zatuk_external extends external_api {
             ]
         );
         self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
         $sdata = new stdClass();
         $sdata->email = $email;
         $sdata->name = $name;
