@@ -23,6 +23,7 @@ use core_external\external_value;
 use context_system;
 use stdClass;
 use repository_zatuk\video_service;
+use repository_zatuk\zatuk_constants as zc;
 
 /**
  * zatuk repository external API
@@ -39,68 +40,61 @@ class configure_zatuk extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-            'organization' => new external_value(PARAM_RAW, 'organization'),
-            'zatukapiurl' => new external_value(PARAM_RAW, 'zatukapiurl'),
-            'organizationcode' => new external_value(PARAM_RAW, 'organizationcode'),
-            'email' => new external_value(PARAM_RAW, 'email'),
-            'name' => new external_value(PARAM_RAW, 'name'),
+            'organization' => new external_value(PARAM_TEXT, 'organization', VALUE_REQUIRED),
+            'organizationcode' => new external_value(PARAM_TEXT, 'organizationcode', VALUE_REQUIRED),
+            'email' => new external_value(PARAM_EMAIL, 'email', VALUE_REQUIRED),
+            'name' => new external_value(PARAM_TEXT, 'name', VALUE_REQUIRED),
         ]);
     }
 
     /**
      * Generates the token with the give passed parameters .
-     * @param string||null $organization
-     * @param string||null $zatukapiurl
-     * @param string||null $organizationcode
-     * @param string||null $email
-     * @param string||null $name
+     * @param string $organization
+     * @param string $organizationcode
+     * @param string $email
+     * @param string $name
      * @return array
      */
     public static function execute(
-        $organization = '',
-        $zatukapiurl = '',
-        $organizationcode = '',
-        $email = '',
-        $name = '',
+        $organization,
+        $organizationcode,
+        $email,
+        $name,
 
     ): array {
 
         [
             'organization' => $organization,
-            'zatukapiurl' => $zatukapiurl,
             'organizationcode' => $organizationcode,
             'email' => $email,
             'name' => $name,
         ] = self::validate_parameters(self::execute_parameters(), [
             'organization' => $organization,
-            'zatukapiurl' => $zatukapiurl,
             'organizationcode' => $organizationcode,
             'email' => $email,
             'name' => $name,
         ]);
         self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
-        $data = [];
+
         $sdata = new stdClass();
         $sdata->email = $email;
         $sdata->name = $name;
         $sdata->organizationcode = $organizationcode;
-        $sdata->zatukapiurl = $zatukapiurl;
         $sdata->organization = $organization;
+        $zatukapiurl = zc::ZATUK_API_URL;
         set_config('zatukapiurl', $zatukapiurl, 'repository_zatuk');
         $videoservice = new video_service();
         $response = $videoservice->configure_zatuk_repository($sdata);
-        $arr = json_decode(json_encode ($response->errors) , true);
-        foreach ($arr as $key => $value) {
-            $errors[$key] = json_decode(json_encode ($value[0]) , true);
-            $errormessage = $errors['token'] . $errors['url'] . $errors['email'];
-            $errormessage .= $errors['shortname'] .$errors['organization_name'] . $errors['name'];
+        $success = zc::DEFAULTSTATUS;
+        $message = '';
+        if ($response->success) {
+            $success = zc::STATUSA;
+            $message = $response->message;
+        } else {
+            $success = zc::DEFAULTSTATUS;
+            $message = $response->message;
         }
-        $data['success'] = $response->success;
-        $data['error'] = $response->error;
-        $data['message'] = $response->message;
-        $data['errormessage'] = $errormessage;
-        return $data;
+        return ['success' => $success, 'message' => $message];
     }
 
     /**
@@ -110,10 +104,8 @@ class configure_zatuk extends external_api {
      */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
-            'success' => new external_value(PARAM_RAW, 'success'),
-            'error' => new external_value(PARAM_RAW, 'error'),
+            'success' => new external_value(PARAM_INT, 'success'),
             'message' => new external_value(PARAM_RAW, 'message'),
-            'errormessage' => new external_value(PARAM_RAW, 'errors'),
         ]);
     }
 }

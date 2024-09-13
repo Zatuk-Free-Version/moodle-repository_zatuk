@@ -40,19 +40,19 @@ class zatuk_constants {
     /**
      * @var string indicates the size of the collection.
      */
-    public const COLLECTION_SIZE =  '1 * 1024 * 1024';
+    public const COLLECTION_SIZE = '1 * 1024 * 1024';
     /**
      * @var int indicates the width of the listing thumbnail.
      */
-    public const LISTING_THUMBNAIL_WIDTH =  150;
+    public const LISTING_THUMBNAIL_WIDTH = 150;
     /**
      * @var int indicates the height of the listing thumbnail.
      */
-    public const LISTING_THUMBNAIL_HEIGHT =  150;
+    public const LISTING_THUMBNAIL_HEIGHT = 150;
     /**
      * @var int indicates number of thumbnails per page.
      */
-    public const ZATUK_THUMBS_PER_PAGE =  10;
+    public const ZATUK_THUMBS_PER_PAGE = 10;
     /**
      * @var int indicates the default status as zero.
      */
@@ -67,4 +67,8 @@ class zatuk_constants {
      */
     public const FOLDERPATH128 = 'f/folder-128';
 
+    /**
+     * @var string zatuk api url.
+     */
+    public const ZATUK_API_URL = 'https://stream2dev.zatuk.com';
 }

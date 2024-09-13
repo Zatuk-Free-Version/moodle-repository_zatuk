@@ -22,6 +22,7 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use context_system;
 use repository_zatuk\video_service;
+use repository_zatuk\zatuk_constants as zc;
 
 /**
  * zatuk repository external API
@@ -38,29 +39,33 @@ class enable_zatuk extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-           'value' => new external_value(PARAM_RAW, 'Test Parameter'),
+           'haskeygenerated' => new external_value(PARAM_INT, 'haskeygenerated'),
         ]);
     }
 
     /**
      * Returns enable response.
-     * @param array $value
+     * @param int $haskeygenerated
      * @return array
      */
-    public static function execute(
-        $value = ''
-    ): array {
+    public static function execute($haskeygenerated) {
+        global $DB;
 
         [
-            'value' => $value,
+            'haskeygenerated' => $haskeygenerated,
         ] = self::validate_parameters(self::execute_parameters(), [
-            'value' => $value,
+            'haskeygenerated' => $haskeygenerated,
         ]);
         self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
         $videoservice = new video_service();
-        $response = $videoservice->enablezatuk();
-        $result = ($response) ? true : false;
+        $result = zc::DEFAULTSTATUS;
+        if ($haskeygenerated) {
+            $response = $videoservice->enablezatuk();
+            $result = ($response) ? zc::STATUSA : zc::DEFAULTSTATUS;
+        } else {
+            $videoservice->remove_zatuk_settings();
+            $result = zc::DEFAULTSTATUS;
+        }
         return ['success' => $result];
     }
 
@@ -71,7 +76,7 @@ class enable_zatuk extends external_api {
      */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
-            'success'  => new external_value(PARAM_RAW, 'success', VALUE_OPTIONAL),
+            'success'  => new external_value(PARAM_INT, 'success'),
         ]);
     }
 }

@@ -43,12 +43,11 @@ export const init = () => {
         if (zatuksettings) {
 
             let organization = $("#id_organization").val();
-            let zatukapiurl = $("#id_zatukapiurl").val();
             let organizationcode = $("#id_organization_code").val();
             let name = $("#id_name").val();
             let email = $("#id_email").val();
             e.preventDefault();
-            if(organization === '' || organizationcode === '' || zatukapiurl === '' || name === '' ||  email === '' ) {
+            if(organization === '' || organizationcode === '' || name === '' ||  email === '' ) {
                 getString('requiredallfields' ,'repository_zatuk').then((str) => {
                     MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                 });
@@ -57,7 +56,6 @@ export const init = () => {
                     method: "GET",
                     dataType: "json",
                     url: M.cfg.wwwroot + "/repository/zatuk/ajax.php?organization="+organization+
-                    "&zatukapiurl="+zatukapiurl+
                     "&organizationcode="+organizationcode+
                     "&name="+name+
                     "&email="+email+"",
@@ -76,15 +74,12 @@ export const init = () => {
         let zatukplans = e.target.closest(Selectors.actions.zatukplans);
         if (zatukplans) {
             e.preventDefault();
-            var params = {};
             var organization = $("#id_organization").val();
-            var zatukapiurl = $("#id_zatukapiurl").val();
             var organizationcode = $("#id_organization_code").val();
             var name = $("#id_name").val();
             var email = $("#id_email").val();
             var params = {};
             params.organization = organization;
-            params.zatukapiurl = zatukapiurl;
             params.organizationcode = organizationcode;
             params.name = name;
             params.email = email;
@@ -94,34 +89,40 @@ export const init = () => {
             }]);
             promise[0].done(function(resp) {
                 if(resp.success) {
-                    var params = {};
-                    params.value = null;
+                     var params = {};
+                     params.haskeygenerated = resp.success;
                     var promise = Ajax.call([{
                         methodname: 'repository_enable_zatuk',
-                        args: params
+                        args : params
                     }]);
-                    promise[0].done(function() {
-                        getString('freetrailmessage' ,'repository_zatuk').then((str) => {
-                            MessageModal.confirmbox(getString('finaltrailmessage','repository_zatuk',str));
-                        });
-                        $(".secret_keys").load(location.href + " .secret_keys");
-                        $('.section_container').addClass('d-none');
-                        $('.section_container.registration_keys').removeClass('d-none');
-                        $('.step-2').addClass('completed');
-                        $('.step-3').addClass('active');
+                    promise[0].done(function(enbresponse) {
+                        if (enbresponse.success) {
+                            getString('freetrailmessage' ,'repository_zatuk').then((str) => {
+                                MessageModal.confirmbox(getString('finaltrailmessage','repository_zatuk',str));
+                            });
+                            $(".secret_keys").load(location.href + " .secret_keys");
+                            $('.section_container').addClass('d-none');
+                            $('.section_container.registration_keys').removeClass('d-none');
+                            $('.step-2').addClass('completed');
+                            $('.step-3').addClass('active');
+                        } else {
+                            getString('keysecretnotgenerated', 'repository_zatuk').then((str) => {
+                               MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
+                            });
+                        }
                     }).fail(function() {
-                        getString('exception', 'repository_zatuk').then((str) => {
+                        getString('errormessage', 'repository_zatuk').then((str) => {
                            MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                         });
                     });
 
                 } else {
-                    if(resp.errormessage === null && resp.success === null) {
+                    if(resp.message === null && resp.success === 0) {
                         getString('serverdown' ,'repository_zatuk').then((str) => {
                           MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                         });
                     } else {
-                        getString(resp.errormessage).then((str) => {
+                        getString(resp.message).then((str) => {
                           MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                         });
                     }
@@ -169,7 +170,7 @@ export const init = () => {
                         });
                     }
                 }).fail(function() {
-                   getString('exception', 'repository_zatuk').then((str) => {
+                   getString('errormessage', 'repository_zatuk').then((str) => {
                         MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                     });
                 });

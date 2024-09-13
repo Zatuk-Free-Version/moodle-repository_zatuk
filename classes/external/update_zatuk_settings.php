@@ -38,23 +38,23 @@ class update_zatuk_settings extends external_api {
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-            'organization' => new external_value(PARAM_RAW, 'organization'),
-            'email' => new external_value(PARAM_RAW, 'email'),
-            'name' => new external_value(PARAM_RAW, 'name'),
+            'organization' => new external_value(PARAM_TEXT, 'organization', VALUE_REQUIRED),
+            'email' => new external_value(PARAM_EMAIL, 'email', VALUE_REQUIRED),
+            'name' => new external_value(PARAM_TEXT, 'name', VALUE_REQUIRED),
         ]);
     }
 
     /**
      * Returns the updated response.
-     * @param array $organization
-     * @param array $email
-     * @param array $name
+     * @param string $organization
+     * @param string $email
+     * @param string $name
      * @return bool
      */
     public static function execute(
-        $organization = '',
-        $email = '',
-        $name = '',
+        $organization,
+        $email,
+        $name,
     ): array {
 
         [
@@ -67,7 +67,6 @@ class update_zatuk_settings extends external_api {
             'name' => $name,
         ]);
         self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
         $sdata = new stdClass();
         $sdata->email = $email;
         $sdata->name = $name;

@@ -41,8 +41,8 @@ class zatuk_get_videos extends external_api {
         return new external_function_parameters([
             'sorting'   => new external_single_structure(
                 [
-                    'key'   => new external_value(PARAM_RAW, 'key', VALUE_OPTIONAL),
-                    'order' => new external_value(PARAM_RAW, 'order', VALUE_OPTIONAL),
+                    'key'   => new external_value(PARAM_RAW, 'key'),
+                    'order' => new external_value(PARAM_RAW, 'order'),
                 ]
             ),
             'search'    => new external_value(PARAM_RAW, 'search'),
@@ -53,8 +53,8 @@ class zatuk_get_videos extends external_api {
     /**
      * Returns a list of videos in a provided list of filters.
      * @param array $sorting
-     * @param array $search
-     * @param array $status
+     * @param string $search
+     * @param string $status
      * @return  array
      */
     public static function execute(
@@ -73,7 +73,6 @@ class zatuk_get_videos extends external_api {
             'status' => $status,
         ]);
         self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
         $filters = new StdClass;
         $filters->search = $search;
         $filters->sort = $sorting;

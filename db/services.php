@@ -24,17 +24,6 @@
 defined('MOODLE_INTERNAL') || die;
 require_once($CFG->dirroot.'/repository/zatuk/lib.php');
 $functions = [
-
-    'repository_zatuk_validate_instance' => [
-        'classname'     => 'repository_zatuk\external\zatuk_validate_instance',
-        'methodname'    => 'execute',
-        'description'   => 'Validates the provided moodle instance',
-        'type'          => 'read',
-        'capabilities'  => 'repository/zatuk:view',
-        'services'      => [MOODLE_ZATUK_WEB_SERVICE],
-        'ajax'          => false,
-        'loginrequired' => true,
-    ],
     'repository_zatuk_get_video_url'   => [
         'classname'     => 'repository_zatuk\external\zatuk_get_video_url',
         'methodname'    => 'execute',
