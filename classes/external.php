@@ -226,7 +226,7 @@ class repository_zatuk_external extends external_api {
      * @param string $name
      * @return array
      */
-    public static function configure_zatuk( $organization,
+    public static function configure_zatuk($organization,
         $organizationcode,
         $email,
         $name) {
@@ -241,7 +241,7 @@ class repository_zatuk_external extends external_api {
             ]
         );
         self::validate_context(context_system::instance());
-         $sdata = new stdClass();
+        $sdata = new stdClass();
         $sdata->email = $email;
         $sdata->name = $name;
         $sdata->organizationcode = $organizationcode;
@@ -262,7 +262,7 @@ class repository_zatuk_external extends external_api {
         return ['success' => $success, 'message' => $message];
     }
     /**
-     * Describes the zatukplan return value.
+     * Describes the configure_zatuk return value.
      * @return  external_single_structure
      */
     public static function configure_zatuk_returns() {
