@@ -388,9 +388,9 @@ class video_service {
         return true;
     }
     /**
-      * Removeing key and secret if  there is an exception while enabling the zatuk.
-      * @return bool
-      */
+     * Removeing key and secret if  there is an exception while enabling the zatuk.
+     * @return bool
+     */
     public function remove_zatuk_settings() {
         $this->db->delete_records('config_plugins', ['plugin' => 'repository_zatuk', 'name' => 'zatuk_key']);
         $this->db->delete_records('config_plugins', ['plugin' => 'repository_zatuk', 'name' => 'zatuk_secret']);

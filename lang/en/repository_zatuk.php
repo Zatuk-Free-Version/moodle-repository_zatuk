@@ -80,6 +80,7 @@ $string['published']  = 'Published';
 $string['publishedvideos'] = 'Published videos';
 $string['registration']  = 'Registration';
 $string['repository/zatuk:view']  = 'View zatuk repository';
+$string['invalidrequest']  = 'Invalid request method (<b>{$a}</b>) specified.';
 $string['required']  = 'Required';
 $string['requiredallfields']  = 'Required all fields.';
 $string['requiredemail'] = 'Please enter an email';

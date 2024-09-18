@@ -150,24 +150,41 @@ class app_service {
             switch($data['method']) {
                 case 'POST':
                     $apiresponse = $c->post($data['url'], $payload);
+                    if (isset($data['response']) && $data['response'] == 'raw') {
+                        $finalapiresponse = $apiresponse;
+                    } else {
+                        $finalapiresponse = json_decode($apiresponse);
+                    }
+                    $response = [
+                        'error'     => false,
+                        'message'   => '',
+                        'response'  => $finalapiresponse,
+                    ];
                 break;
 
                 case 'GET':
                     $apiresponse = $c->get($data['url'], $payload);
+                    if (isset($data['response']) && $data['response'] == 'raw') {
+                        $finalapiresponse = $apiresponse;
+                    } else {
+                        $finalapiresponse = json_decode($apiresponse);
+                    }
+                    $response = [
+                        'error'     => false,
+                        'message'   => '',
+                        'response'  => $finalapiresponse,
+                    ];
                 break;
 
                 default:
+                    $response = [
+                        'error'     => true,
+                        'message'   => get_string('invalidrequest', 'repository_zatuk', $data['method']),
+                        'response'  => [],
+                    ];
+                break;
             }
-            if (isset($data['response']) && $data['response'] == 'raw') {
-                $finalapiresponse = $apiresponse;
-            } else {
-                $finalapiresponse = json_decode($apiresponse);
-            }
-            $response = [
-                'error'     => false,
-                'message'   => '',
-                'response'  => $finalapiresponse,
-            ];
+
         } catch (Exception $e) {
             $response = [
                 'error'     => true,
