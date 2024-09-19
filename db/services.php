@@ -35,7 +35,6 @@ $functions = [
         'services'      => [MOODLE_ZATUK_WEB_SERVICE],
         'ajax'          => true,
         'loginrequired' => true,
-
     ],
     'repository_zatuk_get_videos'   => [
         'classname'     => 'repository_zatuk_external',

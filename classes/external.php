@@ -33,6 +33,7 @@ class repository_zatuk_external extends external_api {
 
     /**
      * Describes the parameters for zatuk_get_videos .
+     *
      * @return  external_function_parameters
      */
     public static function zatuk_get_videos_parameters() {
@@ -40,8 +41,8 @@ class repository_zatuk_external extends external_api {
             [
                 'sorting'   => new external_single_structure(
                     [
-                        'key'   => new external_value(PARAM_RAW, 'key'),
-                        'order' => new external_value(PARAM_RAW, 'order'),
+                        'key'   => new external_value(PARAM_RAW, 'key', VALUE_OPTIONAL),
+                        'order' => new external_value(PARAM_RAW, 'order', VALUE_OPTIONAL),
                     ]
                 ),
                 'search'    => new external_value(PARAM_RAW, 'search'),
@@ -76,6 +77,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the zatuk_get_videos return value.
+     *
      * @return  external_multiple_structure
      */
     public static function zatuk_get_videos_returns() {
@@ -102,6 +104,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the parameters for zatuk_get_video_url .
+     *
      * @return  external_function_parameters
      */
     public static function zatuk_get_video_url_parameters() {
@@ -134,6 +137,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the zatuk_get_video_url return value.
+     *
      * @return external_single_structure
      */
     public static function zatuk_get_video_url_returns() {
@@ -158,6 +162,7 @@ class repository_zatuk_external extends external_api {
 
     /**
      * Describes the parameters for enable_zatuk .
+     *
      * @return external_function_parameters
      */
     public static function enable_zatuk_parameters() {
@@ -194,6 +199,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the enable_zatuk return value.
+     *
      * @return external_single_structure
      */
     public static function enable_zatuk_returns() {
@@ -205,6 +211,7 @@ class repository_zatuk_external extends external_api {
     }
     /**
      * Describes the parameters for configure_zatuk .
+     *
      * @return external_function_parameters
      */
     public static function configure_zatuk_parameters() {
@@ -276,6 +283,7 @@ class repository_zatuk_external extends external_api {
 
     /**
      * Describes the parameters for update_zatuk_settings .
+     *
      * @return external_function_parameters
      */
     public static function update_zatuk_settings_parameters() {
@@ -287,13 +295,12 @@ class repository_zatuk_external extends external_api {
             ]
         );
     }
-
     /**
      * Returns the updated response.
      * @param string $organization
      * @param string $email
      * @param string $name
-     * @return bool
+     * @return array
      */
     public static function update_zatuk_settings($organization, $email, $name) {
 
@@ -312,13 +319,17 @@ class repository_zatuk_external extends external_api {
         $sdata->organization = $organization;
         $videoservice = new video_service();
         $response = $videoservice->update_zatuk_configuration_setting($sdata);
-        return $response;
+        return ['success'   => $response];;
     }
     /**
      * Describes the update_zatuk_settings return value.
+     *
+     * @return external_single_structure
      */
     public static function update_zatuk_settings_returns() {
-        return new external_value(PARAM_BOOL, 'return');
+        return new external_single_structure([
+            'success'  => new external_value(PARAM_RAW, 'success', VALUE_OPTIONAL),
+        ]);
 
     }
 }

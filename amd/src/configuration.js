@@ -164,7 +164,7 @@ export const init = () => {
                     args: params
                 }]);
                 promise[0].done(function(resp) {
-                    if(resp) {
+                    if(resp.success) {
                         getString('updatemessage' ,'repository_zatuk').then((str) => {
                             MessageModal.confirmbox(getString('finaltrailmessage','repository_zatuk',str));
                         });
