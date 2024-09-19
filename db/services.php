@@ -49,6 +49,7 @@ $functions = [
         'methodname'    => 'execute',
         'description'   => 'gets list of available videos',
         'type'          => 'read',
+        'capabilities'  => 'repository/zatuk:view',
         'services'      => [MOODLE_ZATUK_WEB_SERVICE],
         'ajax'          => true,
         'loginrequired' => true,
