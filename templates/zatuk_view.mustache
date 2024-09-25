@@ -27,33 +27,33 @@
             <ul class="reg_path d-flex justify-content-center">
                 <li class="registration step-1 d-flex active flex-grow-1 align-items-center">
                     <div class="d-flex flex-column align-items-center">
-                      <span class="process_no">1</span>
+                      <span class="process_no stage-a">1</span>
                       <span class="stage_info">{{#str}}registration, repository_zatuk{{/str}}</span>
                     </div>
                 </li>
                 <li class="subscription step-2 d-flex flex-grow-1 align-items-center">
                   <div class="d-flex flex-column align-items-center">
-                    <span class="process_no">2</span>
+                    <span class="process_no stage-b">2</span>
                     <span class="stage_info">{{#str}}subscription, repository_zatuk{{/str}}</span>
                   </div>
                 </li>
                 <li class="confirmation step-3 d-flex flex-grow-1 align-items-center">
                   <div class="d-flex flex-column align-items-center">
-                    <span class="process_no">3</span>
+                    <span class="process_no stage-c">3</span>
                     <span class="stage_info">{{#str}}confirmation, repository_zatuk{{/str}}</span>
                   </div>
                 </li>
             </ul>
         </div>
     </div>
-    <div class="registration_form mt-3 w-100 border rounded section_container">
+    <div class="registration_form mt-3 w-100 border rounded section_container stage-form">
         <div class="regform_header p-3 d-flex justify-content-between">
             <h6 class="mb-0">{{#str}}registration, repository_zatuk{{/str}}</h6>
 
         </div>
         <div class="reg_form p-4">{{{register_form}}}</div>
     </div>
-    <div class="registration_plans mt-3 section_container d-none">
+    <div class="registration_plans mt-3 section_container stage-plans d-none">
         <div class="d-flex justify-content-center">
             <div class="plan_cards card">
                 <div class="plancard_content border rounded p-3">
@@ -91,12 +91,12 @@
             <div class="key_value text-muted row p-2 m-0">
                 <div class="col-md-4 d-flex justify-content-end">{{#str}}secret, repository_zatuk{{/str}} :</div>
                 <div class="col-md-8">
-                    <b class="text-dark">{{zatuksecret}}</b>
+                    <b class="text-dark"> {{zatuksecret}}</b>
                 </div>
             </div>
         </div>
         <div class="cnt_btn mt-3 text-center">
-             <a data-action="zatukdetails"><span class="bg-primary text-white btn btn-primary" >{{#str}}continue{{/str}}</span></a>
+             <a data-action="zatukdetails" ><span class="bg-primary text-white btn btn-primary" >{{#str}}login, repository_zatuk{{/str}}</span></a>
         </div>
     </div>
 </div>

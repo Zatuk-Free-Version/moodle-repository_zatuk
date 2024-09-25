@@ -92,18 +92,18 @@ class configurationform extends moodleform {
             $mform->setType('organization_code', PARAM_RAW_TRIMMED);
             $mform->addHelpButton('organization_code', 'organization_code_content', 'repository_zatuk');
             $mform->addRule('organization_code', get_string('required', 'repository_zatuk'), 'required', null, 'client');
-
-            $mform->addElement('submit', 'submit', get_string('zatuksettings', 'repository_zatuk'),
-            ['data-action' => 'zatuksettings']);
+            $submitstring = get_string('zatuksettings', 'repository_zatuk');
+            $action = 'zatuksettings';
         } else {
             $orgcodevalues = ['value' => $organizationcode, "disabled" => "disabled"];
             $mform->addElement('text', 'organization_code', $orgcodestring , $orgcodevalues);
             $mform->setType('organization_code', PARAM_RAW_TRIMMED);
             $mform->addHelpButton('organization_code', 'organization_code_content', 'repository_zatuk');
             $mform->addRule('organization_code', get_string('required', 'repository_zatuk'), 'required', null, 'client');
-
-            $mform->addElement('submit', 'submit', get_string('zatuksettingsupdate', 'repository_zatuk'),
-            ['data-action' => 'updatesettings']);
+            $submitstring = get_string('zatuksettingsupdate', 'repository_zatuk');
+            $action = 'updatesettings';
         }
+        $mform->addElement('submit', 'submit', $submitstring, ['data-action' => $action]);
     }
 }
+
