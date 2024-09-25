@@ -150,3 +150,12 @@
     border: 1px solid #dfdfdf;
     box-shadow: 0px 1px 2px #dfdfdf;
 }
+
+#page-admin-repository-zatuk .registration_process .stage-a {
+   cursor: pointer;
+}
+
+#page-admin-repository-zatuk .registration_process .stage-b {
+   cursor: pointer;
+}
+

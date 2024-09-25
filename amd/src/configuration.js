@@ -178,6 +178,52 @@ export const init = () => {
 
         }
     });
+
+
+    $(document).on('click','.stage-a', function(){
+
+        $('.section_container').removeClass('d-none');
+
+        $('.section_container.registration_plans').addClass('d-none');
+
+        $('.section_container.registration_keys').addClass('d-none');
+
+        $('.stage-form .section_container').addClass('active');
+
+        $('.step-1').removeClass("completed");
+
+        $('.step-2').removeClass('active');
+
+
+    });
+
+    $(document).on('click','.stage-b', function(){
+
+        let organization = $("#id_organization").val();
+        let organizationcode = $("#id_organization_code").val();
+        let name = $("#id_name").val();
+        let email = $("#id_email").val();
+
+         if(organization === '' || organizationcode === '' || name === '' ||  email === '' ) {
+
+            getString('requiredallfields' ,'repository_zatuk').then((str) => {
+                MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
+            });
+
+        } else {
+
+            $('.section_container').addClass('d-none');
+            $('.section_container.registration_plans').removeClass('d-none');
+            $('.stage-form .section_container').removeClass('active');
+            $('.stage-form .section_container').addClass('d-none');
+
+            $('.step-1').addClass('completed');
+            $('.step-2').addClass('active');
+
+        }
+
+    });
+
 };
 
 
