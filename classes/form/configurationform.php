@@ -73,17 +73,17 @@ class configurationform extends moodleform {
         $mform->addElement('text', 'name', get_string('name'), ['value' => $name]);
         $mform->setType('name', PARAM_RAW_TRIMMED);
         $mform->addHelpButton('name', 'name_content', 'repository_zatuk');
-        $mform->addRule('name', get_string('required', 'repository_zatuk'), 'required', null, 'client');
+        $mform->addRule('name', get_string('required'), 'required', null, 'client');
 
         $mform->addElement('text', 'email', get_string('email'), ['value' => $email]);
         $mform->setType('email', PARAM_RAW_TRIMMED);
         $mform->addHelpButton('email', 'email_content', 'repository_zatuk');
-        $mform->addRule('email', get_string('required', 'repository_zatuk'), 'required', null, 'client');
+        $mform->addRule('email', get_string('required'), 'required', null, 'client');
 
         $mform->addElement('text', 'organization', get_string('organization', 'repository_zatuk'), ['value' => $organization]);
         $mform->setType('organization', PARAM_RAW_TRIMMED);
         $mform->addHelpButton('organization', 'organization_content', 'repository_zatuk');
-        $mform->addRule('organization', get_string('required', 'repository_zatuk'), 'required', null, 'client');
+        $mform->addRule('organization', get_string('required'), 'required', null, 'client');
 
         $orgcodestring = get_string('organization_code', 'repository_zatuk');
 
@@ -91,7 +91,7 @@ class configurationform extends moodleform {
             $mform->addElement('text', 'organization_code', $orgcodestring, ['value' => $organizationcode]);
             $mform->setType('organization_code', PARAM_RAW_TRIMMED);
             $mform->addHelpButton('organization_code', 'organization_code_content', 'repository_zatuk');
-            $mform->addRule('organization_code', get_string('required', 'repository_zatuk'), 'required', null, 'client');
+            $mform->addRule('organization_code', get_string('required'), 'required', null, 'client');
             $submitstring = get_string('zatuksettings', 'repository_zatuk');
             $action = 'zatuksettings';
         } else {
@@ -99,7 +99,7 @@ class configurationform extends moodleform {
             $mform->addElement('text', 'organization_code', $orgcodestring , $orgcodevalues);
             $mform->setType('organization_code', PARAM_RAW_TRIMMED);
             $mform->addHelpButton('organization_code', 'organization_code_content', 'repository_zatuk');
-            $mform->addRule('organization_code', get_string('required', 'repository_zatuk'), 'required', null, 'client');
+            $mform->addRule('organization_code', get_string('required'), 'required', null, 'client');
             $submitstring = get_string('zatuksettingsupdate', 'repository_zatuk');
             $action = 'updatesettings';
         }
