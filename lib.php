@@ -216,49 +216,58 @@ class repository_zatuk extends repository {
         global $OUTPUT;
         $folderurl = $OUTPUT->image_url(zc::FOLDERPATH128)->out();
         $listingurl = $this->zatuk->createlistingapiurl();
-
         $params = $this->zatuk->get_listing_params();
         $params['currentPath'] = $path ? $path : '/';
         $params['search'] = null;
         $request = new curl();
         $content = $request->post($listingurl, $params);
-
         $content = json_decode($content, true);
-        $folderlists = array_merge($content['forganizations'], $content['fdirectories']);
-        $fileslist = $content['fvideos'];
         $return = ['dynload' => true, 'nosearch' => false, 'nologin' => true];
-        foreach ($content['navPath'] as $paths) {
-            $iconsize = 96;
-            $pathelement = [
-                'icon' => $OUTPUT->image_url(file_folder_icon($iconsize))->out(false),
-                'path' => $paths['navpathdata'],
-                'name' => $paths['name'],
-            ];
-            $return['path'][] = $pathelement;
+        if (!empty($content['navPath'])) {
+            foreach ($content['navPath'] as $paths) {
+                $pathelement = [
+                    'icon' => $OUTPUT->image_url(file_folder_icon())->out(false),
+                    'path' => $paths['navpathdata'],
+                    'name' => $paths['name'],
+                ];
+                $return['path'][] = $pathelement;
+            }
+        } else {
 
+            $return['path'] = [];
         }
-        $return['list'] = [];
-        foreach ($folderlists as $folders) {
-            $listelement = [];
-            $listelement['thumbnail'] = $folderurl;
-            $listelement['thumbnail_width'] = zc::LISTING_THUMBNAIL_WIDTH;
-            $listelement['thumbnail_height'] = zc::LISTING_THUMBNAIL_HEIGHT;
-            $listelement['title'] = $folders['fullname'];
-            $listelement['path'] = $folders['path'];
-            $listelement['children'] = [];
-            $return['list'][] = $listelement;
+        $folderlists = (!empty($content) && is_array($content['forganizations']) && is_array($content['fdirectories'])) ?
+            array_merge($content['forganizations'], $content['fdirectories']) : [];
+        if (!empty($folderlists)) {
+            foreach ($folderlists as $folders) {
+                $listelement = [];
+                $listelement['thumbnail'] = $folderurl;
+                $listelement['thumbnail_width'] = zc::LISTING_THUMBNAIL_WIDTH;
+                $listelement['thumbnail_height'] = zc::LISTING_THUMBNAIL_HEIGHT;
+                $listelement['title'] = $folders['fullname'];
+                $listelement['path'] = $folders['path'];
+                $listelement['children'] = [];
+                $return['list'][] = $listelement;
+            }
+        } else {
+            $return['list'] = [];
         }
-        foreach ($fileslist as $files) {
-            $filecontent = [
-                'thumbnail' => $this->zatukapiurl.'/storage/'.$files['thumbnail'],
-                'title' => $files['title'],
-                'source' => $files['encodedurl'],
-                'date' => strtotime($files['timecreated']),
-                'license' => 'unknown',
-                'thumbnail_title' => $files['title'],
-                'encoded_url' => $files['encodedurl'],
-            ];
-            $return['list'][] = $filecontent;
+        $fileslist = (!empty($content)) ? $content['fvideos'] : [];
+        if (!empty($fileslist)) {
+            foreach ($fileslist as $files) {
+                $filecontent = [
+                    'thumbnail' => $this->zatukapiurl.'/storage/'.$files['thumbnail'],
+                    'title' => $files['title'],
+                    'source' => $files['encodedurl'],
+                    'date' => strtotime($files['timecreated']),
+                    'license' => 'unknown',
+                    'thumbnail_title' => $files['title'],
+                    'encoded_url' => $files['encodedurl'],
+                ];
+                $return['list'][] = $filecontent;
+            }
+        } else {
+            $return['list'] = [];
         }
         return $return;
 

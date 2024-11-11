@@ -83,7 +83,7 @@ class phpzatuk {
             try {
                 $tokenjson = $c->post($tokenurl, ['key' => $this->clientid, 'secret' => $this->secret, 'domain' => $CFG->wwwroot]);
                 $tokeninfo = json_decode($tokenjson);
-                if ($tokeninfo->success) {
+                if (isset($tokeninfo) && $tokeninfo->success) {
                     $token = $tokeninfo->token;
                     $params = ['token' => $token];
                 } else {
