@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 define('MOODLE_ZATUK_WEB_SERVICE', 'zatuk_web_service');
 global $CFG;
 require_once($CFG->dirroot . '/repository/lib.php');
+use repository_zatuk\video_service;
 use repository_zatuk\app_service;
 use repository_zatuk\phpzatuk;
 use repository_zatuk\zatuk_constants as zc;
@@ -51,10 +52,6 @@ class repository_zatuk extends repository {
      */
     protected $zatuksecret;
     /**
-     * @var array $zatuk
-     */
-    protected $zatuk;
-    /**
      *  repository_zatuk constructor
      *
      * @param int $repositoryid repository instance id.
@@ -68,8 +65,6 @@ class repository_zatuk extends repository {
         $this->zatukapiurl = get_config('repository_zatuk', 'zatukapiurl');
         $this->zatuksecret = get_config('repository_zatuk', 'zatuk_secret');
         $this->service = new app_service($this->zatukkey, $this->zatuksecret);
-        $this->zatuk = new phpzatuk($this->zatukapiurl, $this->zatukkey, $this->zatuksecret);
-
     }
 
     /**
@@ -81,6 +76,12 @@ class repository_zatuk extends repository {
      */
     public static function type_config_form($mform, $classname = 'repository') {
         global $OUTPUT, $CFG, $PAGE;
+
+        $isrepositoryenabled = (new video_service())->isrepositoryenabled();
+        if (!$isrepositoryenabled) {
+            (new video_service())->enablezatuk();
+            purge_caches();
+        }
         $systemcontext = context_system::instance();
         $zatukkey = get_config('repository_zatuk', 'zatuk_key');
         $zatuksecret = get_config('repository_zatuk', 'zatuk_secret');
@@ -154,8 +155,9 @@ class repository_zatuk extends repository {
         }
         $start = ($result['page'] - zc::STATUSA) * zc::ZATUK_THUMBS_PER_PAGE + zc::STATUSA;
         $start = $start - zc::STATUSA;
-        $searchurl = $this->zatuk->createsearchapiurl();
-        $params = $this->zatuk->get_listing_params();
+        $phpzatuk = new phpzatuk($this->zatukapiurl, $this->zatukkey, $this->zatuksecret);
+        $searchurl = $phpzatuk->createsearchapiurl();
+        $params = $phpzatuk->get_listing_params();
         $params['q'] = $q;
         $params['perpage'] = zc::ZATUK_THUMBS_PER_PAGE;
         $request = new curl();
@@ -215,8 +217,9 @@ class repository_zatuk extends repository {
     public function get_listing($path='', $page = '') {
         global $OUTPUT;
         $folderurl = $OUTPUT->image_url(zc::FOLDERPATH128)->out();
-        $listingurl = $this->zatuk->createlistingapiurl();
-        $params = $this->zatuk->get_listing_params();
+        $phpzatuk = new phpzatuk($this->zatukapiurl, $this->zatukkey, $this->zatuksecret);
+        $listingurl = $phpzatuk->createlistingapiurl();
+        $params = $phpzatuk->get_listing_params();
         $params['currentPath'] = $path ? $path : '/';
         $params['search'] = null;
         $request = new curl();
