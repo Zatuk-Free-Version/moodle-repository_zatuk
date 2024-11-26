@@ -75,6 +75,7 @@ class configure_zatuk extends external_api {
             'name' => $name,
         ]);
         self::validate_context(context_system::instance());
+        require_capability('mod/zatuk:viewuploadedvideo', context_system::instance());
 
         $sdata = new stdClass();
         $sdata->email = $email;
@@ -85,15 +86,9 @@ class configure_zatuk extends external_api {
         set_config('zatukapiurl', $zatukapiurl, 'repository_zatuk');
         $videoservice = new video_service();
         $response = $videoservice->configure_zatuk_repository($sdata);
-        $success = zc::DEFAULTSTATUS;
-        $message = '';
-        if ($response->success) {
-            $success = zc::STATUSA;
-            $message = $response->message;
-        } else {
-            $success = zc::DEFAULTSTATUS;
-            $message = $response->message;
-        }
+        $success = $response->success;
+        $message = $response->finalerrormessage;
+
         return ['success' => $success, 'message' => $message];
     }
 
@@ -104,7 +99,7 @@ class configure_zatuk extends external_api {
      */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
-            'success' => new external_value(PARAM_INT, 'success'),
+            'success' => new external_value(PARAM_BOOL, 'success'),
             'message' => new external_value(PARAM_RAW, 'message'),
         ]);
     }

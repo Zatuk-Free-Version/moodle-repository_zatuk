@@ -57,6 +57,7 @@ class enable_zatuk extends external_api {
             'haskeygenerated' => $haskeygenerated,
         ]);
         self::validate_context(context_system::instance());
+        require_capability('repository/zatuk:view', context_system::instance());
         $videoservice = new video_service();
         $result = zc::DEFAULTSTATUS;
         if ($haskeygenerated) {

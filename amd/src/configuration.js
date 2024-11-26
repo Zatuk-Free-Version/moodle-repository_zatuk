@@ -23,6 +23,7 @@ import $ from 'jquery';
 import Ajax from 'core/ajax';
 import {get_string as getString} from 'core/str';
 import messagemodal from 'repository_zatuk/messagemodal';
+import Templates from 'core/templates';
 
 const Selectors = {
     actions: {
@@ -39,9 +40,7 @@ let MessageModal = new messagemodal();
 export const init = () => {
     document.addEventListener('click', function(e) {
         let zatuksettings = e.target.closest(Selectors.actions.zatuksettings);
-
         if (zatuksettings) {
-
             let organization = $("#id_organization").val();
             let organizationcode = $("#id_organization_code").val();
             let name = $("#id_name").val();
@@ -52,20 +51,27 @@ export const init = () => {
                     MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                 });
             } else {
-                $.ajax({
-                    method: "GET",
-                    dataType: "json",
-                    url: M.cfg.wwwroot + "/repository/zatuk/ajax.php?organization="+organization+
-                    "&organizationcode="+organizationcode+
-                    "&name="+name+
-                    "&email="+email+"",
-                    success: function(){
-                        $('.section_container').addClass('d-none');
-                        $('.section_container.registration_plans').removeClass('d-none');
-                        $('.step-1').addClass('completed');
-                        $('.step-2').addClass('active');
-                    }
-                });
+                if (isValidEmail(email)) {
+                    $.ajax({
+                        method: "GET",
+                        dataType: "json",
+                        url: M.cfg.wwwroot + "/repository/zatuk/ajax.php?organization="+organization+
+                        "&organizationcode="+organizationcode+
+                        "&name="+name+
+                        "&email="+email+"",
+                        success: function(){
+                            $('.section_container').addClass('d-none');
+                            $('.section_container.registration_plans').removeClass('d-none');
+                            $('.step-1').addClass('completed');
+                            $('.step-2').addClass('active');
+                        }
+                    });
+
+                } else {
+                    getString('validemailidrequired', 'repository_zatuk', email).then((str) => {
+                        MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
+                    });
+                }
 
             }
         }
@@ -74,6 +80,9 @@ export const init = () => {
         let zatukplans = e.target.closest(Selectors.actions.zatukplans);
         if (zatukplans) {
             e.preventDefault();
+            Templates.render('repository_zatuk/loader', {}).then(function(html, js) {
+              Templates.appendNodeContents('#page-content', html, js);
+            });
             var organization = $("#id_organization").val();
             var organizationcode = $("#id_organization_code").val();
             var name = $("#id_name").val();
@@ -97,6 +106,7 @@ export const init = () => {
                     }]);
                     promise[0].done(function(enbresponse) {
                         if (enbresponse.success) {
+                            $('.zatuk-page-loader').addClass('d-none');
                             getString('freetrailmessage' ,'repository_zatuk').then((str) => {
                                 MessageModal.confirmbox(getString('finaltrailmessage','repository_zatuk',str));
                             });
@@ -106,28 +116,32 @@ export const init = () => {
                             $('.step-2').addClass('completed');
                             $('.step-3').addClass('active');
                         } else {
+                            $('.zatuk-page-loader').addClass('d-none');
                             getString('keysecretnotgenerated', 'repository_zatuk').then((str) => {
                                MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                             });
                         }
                     }).fail(function() {
+                        $('.zatuk-page-loader').addClass('d-none');
                         getString('errormessage', 'repository_zatuk').then((str) => {
                            MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                         });
                     });
 
                 } else {
-                    if(resp.message === null && resp.success === 0) {
-                        getString('serverdown' ,'repository_zatuk').then((str) => {
-                          MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
-                        });
+                    if(resp.message.length > 2) {
+                        $('.zatuk-page-loader').addClass('d-none');
+                        MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',resp.message));
+
                     } else {
-                        getString(resp.message).then((str) => {
+                        $('.zatuk-page-loader').addClass('d-none');
+                        getString('serverdown' ,'repository_zatuk').then((str) => {
                           MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                         });
                     }
                 }
             }).fail(function() {
+                $('.zatuk-page-loader').addClass('d-none');
                 getString('errormessage', 'repository_zatuk').then((str) => {
                   MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                 });
@@ -137,8 +151,9 @@ export const init = () => {
     document.addEventListener('click', function(e) {
         let zatukdetails = e.target.closest(Selectors.actions.zatukdetails);
         if (zatukdetails) {
-            e.preventDefault();
-            $(window).off('beforeunload');
+            window.addEventListener('beforeunload', function (event) {
+                event.stopImmediatePropagation();
+            });
             window.location.reload();
         }
     });
@@ -155,30 +170,37 @@ export const init = () => {
                     MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                 });
             } else {
-                var params = {};
-                params.organization = organization;
-                params.name = name;
-                params.email = email;
-                var promise = Ajax.call([{
-                    methodname: 'repository_update_zatuk_settings',
-                    args: params
-                }]);
-                promise[0].done(function(resp) {
-                    if(resp.success) {
-                        getString('updatemessage' ,'repository_zatuk').then((str) => {
-                            MessageModal.confirmbox(getString('finaltrailmessage','repository_zatuk',str));
+                if (isValidEmail(email)) {
+                    var params = {};
+                    params.organization = organization;
+                    params.name = name;
+                    params.email = email;
+                    var promise = Ajax.call([{
+                        methodname: 'repository_update_zatuk_settings',
+                        args: params
+                    }]);
+                    promise[0].done(function(resp) {
+                        if(resp.success) {
+                            getString('updatemessage' ,'repository_zatuk').then((str) => {
+                                MessageModal.confirmbox(getString('finaltrailmessage','repository_zatuk',str));
+                            });
+                        }
+                    }).fail(function() {
+                       getString('errormessage', 'repository_zatuk').then((str) => {
+                            MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                         });
-                    }
-                }).fail(function() {
-                   getString('errormessage', 'repository_zatuk').then((str) => {
+                    });
+
+                } else {
+                    getString('validemailidrequired', 'repository_zatuk', email).then((str) => {
                         MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
                     });
-                });
+                }
+
             }
 
         }
     });
-
 
     $(document).on('click','.stage-a', function(){
 
@@ -212,17 +234,33 @@ export const init = () => {
 
         } else {
 
-            $('.section_container').addClass('d-none');
-            $('.section_container.registration_plans').removeClass('d-none');
-            $('.stage-form .section_container').removeClass('active');
-            $('.stage-form .section_container').addClass('d-none');
+            if (isValidEmail(email)) {
+                $('.section_container').addClass('d-none');
+                $('.section_container.registration_plans').removeClass('d-none');
+                $('.stage-form .section_container').removeClass('active');
+                $('.stage-form .section_container').addClass('d-none');
 
-            $('.step-1').addClass('completed');
-            $('.step-2').addClass('active');
+                $('.step-1').addClass('completed');
+                $('.step-2').addClass('active');
+
+            } else {
+                getString('validemailidrequired', 'repository_zatuk', email).then((str) => {
+                    MessageModal.confirmbox(getString('failedwarningmessage','repository_zatuk',str));
+                });
+            }
 
         }
 
     });
+
+    /**
+     * Function to validate an email address.
+     * @param {string} inputval - an email.
+     */
+    function isValidEmail(inputval) {
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regex.test(inputval);
+    }
 
 };
 

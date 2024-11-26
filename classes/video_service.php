@@ -38,7 +38,7 @@ class video_service {
     public $db;
 
     /**
-     * @var array $table;
+     * @var string $table;
      */
     public $table;
 
@@ -238,7 +238,7 @@ class video_service {
     /**
      * Gets file Object from Moodle Data.
      * @param integer $fileid
-     * @param integer $filetype
+     * @param string $filetype
      * @return object $file
      */
     public function get_file_object($fileid, $filetype) {
@@ -340,16 +340,15 @@ class video_service {
         $apiresponse = $service->upgrade_package($name, $email, $token, $organization, $organizationcode);
         $response = $apiresponse['response'];
         if (!$response->success) {
+            $finalerrormessage = '';
             if ($response->errors && is_object($response->errors)) {
                 foreach ($response->errors as $key => $apierror) {
-                    if ($key == 'token') {
-                        $errors['moodle_token'] = $apierror[0];
-                    } else {
-                        $errors[$key] = $apierror[0];
-                    }
+                    $response->finalerrormessage = $response->message.': '.$apierror[0];
+
                 }
             }
             $errors['generic_errors'] = $response->message;
+
         } else {
 
             if ($organization) {

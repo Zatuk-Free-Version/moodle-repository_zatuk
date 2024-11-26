@@ -158,4 +158,19 @@
 #page-admin-repository-zatuk .registration_process .stage-b {
    cursor: pointer;
 }
+#page-admin-repository-zatuk div[data-region="page-loader"] > div {
+    text-align: center;
+    position: absolute;
+    left: calc(50% - 60px);
+    top: calc(50% - 208px);
 
+}
+#page-admin-repository-zatuk div[data-region="page-loader"] {
+    background: #a5a5a54d;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+}

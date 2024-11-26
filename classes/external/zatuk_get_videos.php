@@ -73,6 +73,7 @@ class zatuk_get_videos extends external_api {
             'status' => $status,
         ]);
         self::validate_context(context_system::instance());
+        require_capability('repository/zatuk:view', context_system::instance());
         $filters = new StdClass;
         $filters->search = $search;
         $filters->sort = $sorting;
