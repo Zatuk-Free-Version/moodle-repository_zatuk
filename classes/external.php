@@ -259,13 +259,8 @@ class repository_zatuk_external extends external_api {
         $response = $videoservice->configure_zatuk_repository($sdata);
         $success = zc::DEFAULTSTATUS;
         $message = '';
-        if ($response->success) {
-            $success = zc::STATUSA;
-            $message = $response->message;
-        } else {
-            $success = zc::DEFAULTSTATUS;
-            $message = $response->message;
-        }
+        $success = $response->success;
+        $message = $response->finalerrormessage;
         return ['success' => $success, 'message' => $message];
     }
     /**

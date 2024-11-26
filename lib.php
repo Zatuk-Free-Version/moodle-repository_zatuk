@@ -185,7 +185,7 @@ class repository_zatuk extends repository {
      */
     private function get_collection($content) {
         $list = [];
-        if (count($content['data']) > zc::DEFAULTSTATUS) {
+        if (isset($content['data']) && count($content['data']) > zc::DEFAULTSTATUS) {
             foreach ($content['data'] as $entry) {
                 $list[] = [
                     'shorttitle' => $entry['title'],
