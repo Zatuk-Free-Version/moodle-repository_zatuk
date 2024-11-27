@@ -51,9 +51,6 @@
     4. User can install the Plugin by Choose File option or he/she can drag and drop the downloaded zip file in the drag and drop box.
     5. After choosing the file click on continue till the Upgrade of the new version is successful.
 
-# Supported Moodle versions:
-    Moodle 4.0
-
 # Code repository name:
     Moodle-repository_zatuk
 
