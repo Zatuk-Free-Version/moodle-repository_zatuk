@@ -23,7 +23,7 @@
  */
 $string['apikey']  = 'API key';
 $string['band_monthly_5gb']  = 'BandWidth/monthly - 5GB';
-$string['bodycontent'] = 'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsumIn publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum.';
+$string['bodycontent'] = 'Zatuk is a streaming platform designed to alleviate server load by offloading video hosting to its own dedicated servers. This ensures smoother performance and faster video delivery for users, leading to improved efficiency and scalability. If you wish to upgrade your services or explore additional features, kindly send your request to info@zatuk.com for further assistance.';
 $string['configplugin'] = 'Zatuk configuration';
 $string['configuration']  = 'Configuration';
 $string['confirmation']  = 'Confirmation';
