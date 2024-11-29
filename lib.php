@@ -77,6 +77,8 @@ class repository_zatuk extends repository {
     public static function type_config_form($mform, $classname = 'repository') {
         global $OUTPUT, $CFG, $PAGE;
 
+        $mformid = 'zatukconfigureform';
+        $mform->setAttributes(['id' => $mformid] + $mform->getAttributes());
         $isrepositoryenabled = (new video_service())->isrepositoryenabled();
         if (!$isrepositoryenabled) {
             (new video_service())->enablezatuk();
