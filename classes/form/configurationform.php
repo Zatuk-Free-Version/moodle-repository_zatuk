@@ -103,6 +103,10 @@ class configurationform extends moodleform {
             $submitstring = get_string('zatuksettingsupdate', 'repository_zatuk');
             $action = 'updatesettings';
         }
+
+        $mformid = 'zatukconfigureform';
+        $mform->setAttributes(['id' => $mformid] + $mform->getAttributes());
+
         $mform->addElement('submit', 'submit', $submitstring, ['data-action' => $action]);
     }
 }
