@@ -36,10 +36,9 @@ const Selectors = {
 };
 
 let MessageModal = new messagemodal();
-
+$('#id_submitbutton').parent().remove();
+$('#id_cancel').parent().remove();
 export const init = () => {
-    $('#id_submitbutton').parent().remove();
-    $('#id_cancel').parent().remove();
     document.addEventListener('click', function(e) {
         let zatuksettings = e.target.closest(Selectors.actions.zatuksettings);
         if (zatuksettings) {
