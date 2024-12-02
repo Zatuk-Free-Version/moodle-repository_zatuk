@@ -67,6 +67,7 @@ class repository_zatuk_external extends external_api {
             ]
         );
         self::validate_context(context_system::instance());
+        require_capability('repository/zatuk:view', context_system::instance());
         $filters = new StdClass;
         $filters->search = $search;
         $filters->sort = $sorting;
@@ -127,6 +128,7 @@ class repository_zatuk_external extends external_api {
             ]
         );
         self::validate_context(context_system::instance());
+        require_capability('repository/zatuk:view', context_system::instance());
         $videoservice = new video_service();
         $video = $videoservice->get_video($videoid);
         return [
@@ -186,6 +188,7 @@ class repository_zatuk_external extends external_api {
             ]
         );
         self::validate_context(context_system::instance());
+        require_capability('repository/zatuk:view', context_system::instance());
         $videoservice = new video_service();
         $result = zc::DEFAULTSTATUS;
         if ($haskeygenerated) {
@@ -248,6 +251,7 @@ class repository_zatuk_external extends external_api {
             ]
         );
         self::validate_context(context_system::instance());
+        require_capability('repository/zatuk:view', context_system::instance());
         $sdata = new stdClass();
         $sdata->email = $email;
         $sdata->name = $name;
@@ -308,6 +312,7 @@ class repository_zatuk_external extends external_api {
             ]
         );
         self::validate_context(context_system::instance());
+        require_capability('repository/zatuk:view', context_system::instance());
         $sdata = new stdClass();
         $sdata->email = $email;
         $sdata->name = $name;
