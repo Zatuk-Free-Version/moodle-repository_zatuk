@@ -23,10 +23,10 @@
 <div class="repository_view">
     <div class="registration_process mb-3">
         <div class="row row zatukbanner m-0 mb-3 p-3">
-            <div class="col-md-3">
+            <div class="col-xl-3 mt-2">
                 <div class="zatuklogo"></div>
             </div>
-            <div class="col-md-7">
+            <div class="col-xl-9 mt-2">
                 <h4>{{#str}}headercontent, repository_zatuk{{/str}}</h4>
                 <p>{{#str}}bodycontent, repository_zatuk{{/str}}</p>
             </div>
@@ -43,13 +43,13 @@
         <div class="key_value text-muted active d-flex p-2 m-0">
                 <div class="mr-3">{{#str}}apikey, repository_zatuk{{/str}} :</div>
                 <div class="">
-                    <b class="text-dark">{{zatukkey}}</b>
+                    <b class="value text-dark">{{zatukkey}}</b>
                 </div>
             </div>
             <div class="key_value text-muted d-flex p-2 m-0">
-                <div class="mr-3-">{{#str}}secret, repository_zatuk{{/str}} :</div>
+                <div class="mr-3">{{#str}}secret, repository_zatuk{{/str}} :</div>
                 <div class="">
-                    <b class="text-dark p-3"> {{zatuksecret}}</b>
+                    <b class="value text-dark"> {{zatuksecret}}</b>
                 </div>
             </div>
         </div>  
@@ -68,6 +68,10 @@
  
 </div>
 {{#js}}
+    require(['jquery'], function($) {
+        $('#id_submitbutton').parent().remove();
+        $('#id_cancel').parent().remove();
+    });
     require(['repository_zatuk/configuration'], function(s) {
         s.init();
     });

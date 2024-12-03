@@ -36,7 +36,7 @@
     position: absolute;
     width: 100%;
     left: 38px;
-    min-width: 162px;
+    min-width: 100px;
 }
 #page-admin-repository-zatuk .registration_process .reg_path li .stage_info {
     color: #8E8E8E;
@@ -161,16 +161,28 @@
 #page-admin-repository-zatuk div[data-region="page-loader"] > div {
     text-align: center;
     position: absolute;
-    left: calc(50% - 60px);
-    top: calc(50% - 208px);
+    left: 49%;
+    bottom: 450px;
 
 }
 #page-admin-repository-zatuk div[data-region="page-loader"] {
     background: #a5a5a54d;
-    position: absolute;
+    position: relative;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
     z-index: 99;
+}
+@media (max-width: 768px) {
+    #page-admin-repository-zatuk .registration_keys {
+        max-width: 100%;
+    }
+    #page-admin-repository-zatuk .mform:not(.full-width-labels) .col-form-label .form-label-addon {
+        margin-left: inherit;
+    }
+}
+#page-admin-repository-zatuk .registration_keys .secret_keys .key_value .value,
+#page-admin-repository-zatuk #configuration_tab .key_value .value  {
+    word-break: break-word;
 }

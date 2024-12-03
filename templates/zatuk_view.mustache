@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
-    <div class="registration_keys mt-4 m-auto section_container d-none">
+    <div class="registration_keys mt-4 m-sm-auto section_container d-none">
         <h5 class="key_header mb-2 text-center">
             {{#str}}key_secret_instance, repository_zatuk{{/str}}
         </h5>
@@ -101,6 +101,10 @@
     </div>
 </div>
 {{#js}}
+    require(['jquery'], function($) {
+        $('#id_submitbutton').parent().remove();
+        $('#id_cancel').parent().remove();
+    });
     require(['repository_zatuk/configuration'], function(s) {
         s.init();
     });
