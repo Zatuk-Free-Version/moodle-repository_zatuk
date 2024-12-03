@@ -75,7 +75,7 @@ class configure_zatuk extends external_api {
             'name' => $name,
         ]);
         self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
+        require_capability('repository/zatuk:processzatukrepository', context_system::instance());
 
         $sdata = new stdClass();
         $sdata->email = $email;

@@ -54,7 +54,7 @@ class zatuk_get_video_url extends external_api {
             'videoid' => $videoid,
         ]);
         self::validate_context(context_system::instance());
-        require_capability('repository/zatuk:view', context_system::instance());
+        require_capability('repository/zatuk:processzatukrepository', context_system::instance());
         $videoservice = new video_service();
         $video = $videoservice->get_video($videoid);
         return [

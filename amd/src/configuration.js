@@ -34,10 +34,7 @@ const Selectors = {
 
     },
 };
-
 let MessageModal = new messagemodal();
-$('#id_submitbutton').parent().remove();
-$('#id_cancel').parent().remove();
 export const init = () => {
     document.addEventListener('click', function(e) {
         let zatuksettings = e.target.closest(Selectors.actions.zatuksettings);

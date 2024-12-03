@@ -32,4 +32,11 @@ $capabilities = [
             'manager' => CAP_ALLOW,
         ],
     ],
+    'repository/zatuk:processzatukrepository' => [
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+        ],
+    ],
 ];

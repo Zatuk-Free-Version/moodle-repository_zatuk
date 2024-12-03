@@ -68,6 +68,7 @@ $string['updatemessage']  = 'Updated successfully';
 $string['upgrade'] = 'Upgrade';
 $string['validemailidrequired'] = '"{$a}" is not a valid email format.';
 $string['video_space_10gb']  = 'Video storage space - 10GB';
+$string['zatuk:processzatukrepository'] = 'Processing all actions in zatuk repository';
 $string['zatuk:view'] = 'View zatuk repository';
 $string['zatuk_cloud_hosting']  = 'Zatuk cloud hosting';
 $string['zatuksettings']  = 'Submit';
