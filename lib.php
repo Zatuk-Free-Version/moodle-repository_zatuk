@@ -160,6 +160,7 @@ class repository_zatuk extends repository {
         $phpzatuk = new phpzatuk($this->zatukapiurl, $this->zatukkey, $this->zatuksecret);
         $searchurl = $phpzatuk->createsearchapiurl();
         $params = $phpzatuk->get_listing_params();
+        $params['page'] = $result['page'];
         $params['q'] = $q;
         $params['perpage'] = zc::ZATUK_THUMBS_PER_PAGE;
         $request = new curl();
@@ -186,9 +187,16 @@ class repository_zatuk extends repository {
      * @return array
      */
     private function get_collection($content) {
+        global $DB, $USER;
         $list = [];
         if (isset($content['data']) && count($content['data']) > zc::DEFAULTSTATUS) {
             foreach ($content['data'] as $entry) {
+                $videorecord = $DB->get_record('zatuk_uploaded_videos', ['videoid' => $entry['videoid']]);
+                if (!is_siteadmin() && $videorecord->videoid == $entry['videoid'] &&
+                    $videorecord->public == 0 &&
+                    $videorecord->usercreated != $USER->id) {
+                    continue;
+                }
                 $list[] = [
                     'shorttitle' => $entry['title'],
                     'thumbnail_title' => $entry['title'],
@@ -217,7 +225,7 @@ class repository_zatuk extends repository {
      * @return array the list of files
      */
     public function get_listing($path='', $page = '') {
-        global $OUTPUT;
+        global $OUTPUT, $USER, $DB;
         $folderurl = $OUTPUT->image_url(zc::FOLDERPATH128)->out();
         $phpzatuk = new phpzatuk($this->zatukapiurl, $this->zatukkey, $this->zatuksecret);
         $listingurl = $phpzatuk->createlistingapiurl();
@@ -260,6 +268,11 @@ class repository_zatuk extends repository {
         $fileslist = (!empty($content)) ? $content['fvideos'] : [];
         if (!empty($fileslist)) {
             foreach ($fileslist as $files) {
+                $videorecord = $DB->get_record('zatuk_uploaded_videos', ['videoid' => $files['videoid']]);
+                if (!is_siteadmin() && $videorecord->videoid == $files['videoid'] &&
+                    $videorecord->public == 0 && $videorecord->usercreated != $USER->id) {
+                    continue;
+                }
                 $filecontent = [
                     'thumbnail' => $this->zatukapiurl.'/storage/'.$files['thumbnail'],
                     'title' => $files['title'],
