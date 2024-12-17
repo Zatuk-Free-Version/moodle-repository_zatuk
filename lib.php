@@ -188,6 +188,7 @@ class repository_zatuk extends repository {
      */
     private function get_collection($content) {
         global $DB, $USER;
+
         $list = [];
         if (isset($content['data']) && count($content['data']) > zc::DEFAULTSTATUS) {
             foreach ($content['data'] as $entry) {
@@ -226,6 +227,7 @@ class repository_zatuk extends repository {
      */
     public function get_listing($path='', $page = '') {
         global $OUTPUT, $USER, $DB;
+
         $folderurl = $OUTPUT->image_url(zc::FOLDERPATH128)->out();
         $phpzatuk = new phpzatuk($this->zatukapiurl, $this->zatukkey, $this->zatuksecret);
         $listingurl = $phpzatuk->createlistingapiurl();
